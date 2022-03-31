@@ -22,9 +22,8 @@ const HeroImage = () => {
 				{
 					children: (
 						<div className={styles.header_container}>
-							<h1 className={styles.header}>
-								Budleigh Salterton Chamber of Commerce
-							</h1>
+							<h1 className={styles.header}>Budleigh Salterton</h1>
+							<h2 className={styles.subheader}>Chamber of Commerce</h2>
 						</div>
 					),
 					speed: 10,
