@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import styles from '../../styles/Navbar.module.css';
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import styles from "../../styles/Navbar.module.css";
 
 const Navbar = () => {
 	const [navbar, setNavbar] = useState(false);
@@ -11,18 +11,18 @@ const Navbar = () => {
 		else setNavbar(false);
 	};
 	const navItems = [
-		{ name: 'Home', path: '/' },
-		{ name: 'Directory', path: '/directory' },
-		{ name: 'About', path: '/#about' },
-		{ name: 'Membership', path: '/#membership' },
-		{ name: 'Contact', path: '/contact' },
+		{ name: "Home", path: "/" },
+		{ name: "Directory", path: "/directory" },
+		{ name: "About", path: "/#about" },
+		{ name: "Membership", path: "/#membership" },
+		{ name: "Contact", path: "/contact" },
 	];
 
 	useEffect(() => {
-		window.addEventListener('scroll', changeBackground);
+		window.addEventListener("scroll", changeBackground);
 	}, []);
 	return (
-		<navbar
+		<div
 			className={`${[styles.navbar]} ${[
 				navbar ? styles.transparent : styles.opaque,
 			]}`}>
@@ -36,7 +36,7 @@ const Navbar = () => {
 					);
 				})}
 			</div>
-		</navbar>
+		</div>
 	);
 };
 
