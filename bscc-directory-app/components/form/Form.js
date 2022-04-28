@@ -1,22 +1,23 @@
-import { useRouter } from "next/router";
-import { useState } from "react";
-import { mutate } from "swr";
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import useSWR, { useSWRConfig } from 'swr';
 
 const Form = ({ formId, businessForm, forNewBusiness = true }) => {
+	const { mutate } = useSWRConfig();
 	const router = useRouter();
-	const contentType = "application/json";
+	const contentType = 'application/json';
 	const [errors, setErrors] = useState({});
-	const [message, setMessage] = useState("");
+	const [message, setMessage] = useState('');
 
 	const [form, setForm] = useState({
 		name: businessForm.name,
 		bio: businessForm.bio,
-		phone: businessForm.phone,
-		website: businessForm.website,
-		line_1: businessForm.line_1,
-		line_2: businessForm.line_2,
-		town: businessForm.town,
-		postcode: businessForm.postcode,
+		phone: businessForm.contact.phone,
+		website: businessForm.contact.website,
+		line_1: businessForm.address.line_1,
+		line_2: businessForm.address.line_2,
+		town: businessForm.address.town,
+		postcode: businessForm.address.postcode,
 	});
 
 	// PUT method to edit an existing entry in the mongoDB database
@@ -25,10 +26,10 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 
 		try {
 			const res = await fetch(`api/businesses/${id}`, {
-				method: "PUT",
+				method: 'PUT',
 				headers: {
 					Accept: contentType,
-					"Content-Type": contentType,
+					'Content-Type': contentType,
 				},
 				body: JSON.stringify(form),
 			});
@@ -39,34 +40,53 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 			const { data } = await res.json();
 
 			mutate(`/api/businesses/${id}`, data, false); // update the local data without a revalidation
-			router.push("/directory");
+			router.push('/directory');
 		} catch (error) {
-			setMessage("Failed to update business");
+			setMessage('Failed to update business');
 		}
 	};
 
 	// POST method adds new entry
 	const postData = async (form) => {
 		try {
-			const res = await fetch("/api/businesses", {
-				method: "POST",
+			const res = await fetch('/api/businesses', {
+				method: 'POST',
 				headers: {
 					Accept: contentType,
-					"Content-Type": contentType,
+					'Content-Type': contentType,
 				},
-				body: JSON.stringify(form),
+				body: JSON.stringify({
+					name: form.name,
+					contact: {
+						phone: form.phone,
+						website: form.website,
+					},
+					address: {
+						line_1: form.line_1,
+						line_2: form.line_2,
+						town: form.town,
+						postcode: form.postcode,
+					},
+					bio: form.bio,
+				}),
 			});
 
 			if (!res.ok) {
 				throw new Error(res.status);
 			}
-			router.push("/directory");
+			router.push('/directory');
 		} catch (error) {
-			setMessage("Failed to add business");
+			setMessage('Failed to add business');
 		}
 	};
 
+	// TO FIX:
+	// State not updating properly, creating a new field rather than updating form state field
+	// Should aim to rewrite the form state to avoid nested properties
+	// Needs to be done in a way that ensures the form data fits the Business model
+
 	const handleChange = (e) => {
+		e.preventDefault();
 		const target = e.target;
 		const value = target.value;
 		const name = target.name;
@@ -90,13 +110,13 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 
 	const formValidate = () => {
 		let error = {};
-		if (!form.name) error.name = "Name is required";
-		if (!form.phone) error.phone = "A phone number is required";
-		if (!form.line_1) error.line_1 = "A full address is required";
-		if (!form.line_2) error.line_2 = "A full address is required";
-		if (!form.town) error.town = "A full address is required";
-		if (!form.postcode) error.postcode = "A full address is required";
-		if (!form.bio) error.bio = "A business description is required";
+		if (!form.name) error.name = 'Name is required';
+		if (!form.phone) error.phone = 'A phone number is required';
+		if (!form.line_1) error.line_1 = 'A full address is required';
+		if (!form.line_2) error.line_2 = 'A full address is required';
+		if (!form.town) error.town = 'A full address is required';
+		if (!form.postcode) error.postcode = 'A full address is required';
+		if (!form.bio) error.bio = 'A business description is required';
 		return error;
 	};
 
@@ -104,75 +124,75 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 		<>
 			<h2>Business</h2>
 			<form id={formId} onSubmit={handleSubmit}>
-				<label htmlFor="name">Name</label>
+				<label htmlFor='name'>Name</label>
 				<input
-					type="text"
-					name="name"
+					type='text'
+					name='name'
 					value={form.name}
 					onChange={handleChange}
 					required
 				/>
 				<h3>Contact</h3>
-				<label htmlFor="phone">Phone</label>
+				<label htmlFor='phone'>Phone</label>
 				<input
-					type="text"
-					name="phone"
+					type='text'
+					name='phone'
 					value={form.phone}
 					onChange={handleChange}
 					required
 				/>
-				<label htmlFor="website">Website</label>
+				<label htmlFor='website'>Website</label>
 				<input
-					type="text"
-					name="website"
+					type='text'
+					name='website'
 					value={form.website}
 					onChange={handleChange}
 				/>
 				<h3>Address</h3>
-				<label htmlFor="line_1">Line 1</label>
+				<label htmlFor='line_1'>Line 1</label>
 				<input
-					type="text"
-					name="line_1"
+					type='text'
+					name='line_1'
 					value={form.line_1}
 					onChange={handleChange}
 					required
 				/>
-				<label htmlFor="line_2">Line 2</label>
+				<label htmlFor='line_2'>Line 2</label>
 				<input
-					type="text"
-					name="line_2"
+					type='text'
+					name='line_2'
 					value={form.line_2}
 					onChange={handleChange}
 					required
 				/>
-				<label htmlFor="town">Town</label>
+				<label htmlFor='town'>Town</label>
 				<input
-					type="text"
-					name="town"
+					type='text'
+					name='town'
 					value={form.town}
 					onChange={handleChange}
 					required
 				/>
-				<label htmlFor="postcode">Postcode</label>
+				<label htmlFor='postcode'>Postcode</label>
 				<input
-					type="text"
-					name="postcode"
+					type='text'
+					name='postcode'
 					value={form.postcode}
 					onChange={handleChange}
 					required
 				/>
 				<br />
 				<h3>Details</h3>
-				<label htmlFor="bio">Bio</label>
+				<label htmlFor='bio'>Bio</label>
 				<input
-					type="text"
-					name="bio"
+					type='text'
+					name='bio'
 					value={form.bio}
 					onChange={handleChange}
 					required
 				/>
 				<br />
-				<button type="submit">Submit</button>
+				<button type='submit'>Submit</button>
 			</form>
 		</>
 	);

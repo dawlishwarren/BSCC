@@ -1,6 +1,6 @@
-import Link from "next/link";
-import dbConnect from "../lib/dbConnect";
-import Business from "../models/Business";
+import Link from 'next/link';
+import dbConnect from '../lib/dbConnect';
+import Business from '../models/Business';
 
 export default function Directory({ businesses }) {
 	return (
@@ -20,14 +20,14 @@ export default function Directory({ businesses }) {
 					<p>{business.address.postcode}</p>
 					{/* Test link to individual page */}
 					<h3>See Page:</h3>
-					<Link href="/[id]" as={`/${business._id}`}>
+					<Link href='/[id]' as={`/${business._id}`}>
 						<button>View</button>
 					</Link>
 				</div>
 			))}
 
 			<h2>Add a new Business:</h2>
-			<Link href="/newBusiness">
+			<Link href='/new'>
 				<button>Go</button>
 			</Link>
 		</div>
