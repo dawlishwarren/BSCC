@@ -1,25 +1,24 @@
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
-import styles from "../../styles/Navbar.module.css";
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import styles from '../../styles/Navbar.module.css';
 
 const Navbar = () => {
 	const [navbar, setNavbar] = useState(false);
 
 	const changeBackground = () => {
-		console.log(window.scrollY);
 		if (window.scrollY <= 80) setNavbar(true);
 		else setNavbar(false);
 	};
 	const navItems = [
-		{ name: "Home", path: "/" },
-		{ name: "Directory", path: "/directory" },
-		{ name: "About", path: "/#about" },
-		{ name: "Membership", path: "/#membership" },
-		{ name: "Contact", path: "/contact" },
+		{ name: 'Home', path: '/' },
+		{ name: 'Directory', path: '/directory' },
+		{ name: 'About', path: '/#about' },
+		{ name: 'Membership', path: '/#membership' },
+		{ name: 'Contact', path: '/contact' },
 	];
 
 	useEffect(() => {
-		window.addEventListener("scroll", changeBackground);
+		window.addEventListener('scroll', changeBackground);
 	}, []);
 	return (
 		<div

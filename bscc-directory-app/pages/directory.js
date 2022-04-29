@@ -23,6 +23,11 @@ export default function Directory({ businesses }) {
 					<Link href='/[id]' as={`/${business._id}`}>
 						<button>View</button>
 					</Link>
+					{/* Edit */}
+					<h3>Edit Content:</h3>
+					<Link href='/[id]/edit' as={`/${business._id}/edit`}>
+						<button>Edit</button>
+					</Link>
 				</div>
 			))}
 

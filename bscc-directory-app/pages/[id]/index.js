@@ -1,8 +1,22 @@
-import dbConnect from "../../lib/dbConnect";
-import Business from "../../models/Business";
-import Navbar from "../../components/navbar/Navbar";
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import Link from 'next/link';
+import dbConnect from '../../lib/dbConnect';
+import Business from '../../models/Business';
 
 export default function BusinessPage({ business }) {
+	const router = useRouter();
+	const [message, setMessage] = useState('');
+	const handleDelete = async () => {
+		const businessID = router.query.id;
+
+		try {
+			await fetch(`/api/businesses/${businessID}`, { method: 'Delete' });
+			router.push('/directory');
+		} catch (err) {
+			setMessage('Failed to delete the business, please check the console');
+		}
+	};
 	const {
 		name,
 		bio,
@@ -22,6 +36,12 @@ export default function BusinessPage({ business }) {
 				<p>{line_2}</p>
 				<p>{town}</p>
 				<p>{postcode}</p>
+			</div>
+			<div>
+				<Link href='/[id]/edit' as={`/${business._id}/edit`}>
+					<button>Edit</button>
+				</Link>
+				<button onClick={handleDelete}>Delete</button>
 			</div>
 		</>
 	);

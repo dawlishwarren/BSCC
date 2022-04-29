@@ -20,26 +20,41 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 		postcode: businessForm.address.postcode,
 	});
 
-	// PUT method to edit an existing entry in the mongoDB database
+	/* The PUT method edits an existing entry in the mongodb database. */
 	const putData = async (form) => {
 		const { id } = router.query;
 
 		try {
-			const res = await fetch(`api/businesses/${id}`, {
+			const res = await fetch(`/api/businesses/${id}`, {
 				method: 'PUT',
 				headers: {
 					Accept: contentType,
 					'Content-Type': contentType,
 				},
-				body: JSON.stringify(form),
+				body: JSON.stringify({
+					name: form.name,
+					contact: {
+						phone: form.phone,
+						website: form.website,
+					},
+					address: {
+						line_1: form.line_1,
+						line_2: form.line_2,
+						town: form.town,
+						postcode: form.postcode,
+					},
+					bio: form.bio,
+				}),
 			});
 
+			// Throw error with status code in case Fetch API req failed
 			if (!res.ok) {
 				throw new Error(res.status);
 			}
+
 			const { data } = await res.json();
 
-			mutate(`/api/businesses/${id}`, data, false); // update the local data without a revalidation
+			mutate(`/api/business/${id}`, data, false); // Update the local data without a revalidation
 			router.push('/directory');
 		} catch (error) {
 			setMessage('Failed to update business');
