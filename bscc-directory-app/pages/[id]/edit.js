@@ -23,6 +23,7 @@ export default function EditBusiness() {
 		contact: {
 			phone: business.contact.phone,
 			website: business.contact.website,
+			email: business.contact.email,
 		},
 		address: {
 			line_1: business.address.line_1,
@@ -31,6 +32,7 @@ export default function EditBusiness() {
 			postcode: business.address.postcode,
 		},
 		bio: business.bio,
+		category: business.category,
 	};
 	return (
 		<Form

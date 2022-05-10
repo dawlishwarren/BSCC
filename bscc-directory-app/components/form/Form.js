@@ -14,10 +14,12 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 		bio: businessForm.bio,
 		phone: businessForm.contact.phone,
 		website: businessForm.contact.website,
+		email: businessForm.contact.email,
 		line_1: businessForm.address.line_1,
 		line_2: businessForm.address.line_2,
 		town: businessForm.address.town,
 		postcode: businessForm.address.postcode,
+		category: businessForm.category,
 	});
 
 	/* The PUT method edits an existing entry in the mongodb database. */
@@ -36,6 +38,7 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 					contact: {
 						phone: form.phone,
 						website: form.website,
+						email: form.email,
 					},
 					address: {
 						line_1: form.line_1,
@@ -44,6 +47,7 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 						postcode: form.postcode,
 					},
 					bio: form.bio,
+					category: form.category,
 				}),
 			});
 
@@ -53,7 +57,7 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 			}
 
 			const { data } = await res.json();
-
+			console.log(data);
 			mutate(`/api/business/${id}`, data, false); // Update the local data without a revalidation
 			router.push('/directory');
 		} catch (error) {
@@ -75,6 +79,7 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 					contact: {
 						phone: form.phone,
 						website: form.website,
+						email: form.email,
 					},
 					address: {
 						line_1: form.line_1,
@@ -83,9 +88,10 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 						postcode: form.postcode,
 					},
 					bio: form.bio,
+					category: form.category,
 				}),
 			});
-
+			console.log(form);
 			if (!res.ok) {
 				throw new Error(res.status);
 			}
@@ -128,7 +134,6 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 		if (!form.name) error.name = 'Name is required';
 		if (!form.phone) error.phone = 'A phone number is required';
 		if (!form.line_1) error.line_1 = 'A full address is required';
-		if (!form.line_2) error.line_2 = 'A full address is required';
 		if (!form.town) error.town = 'A full address is required';
 		if (!form.postcode) error.postcode = 'A full address is required';
 		if (!form.bio) error.bio = 'A business description is required';
@@ -163,6 +168,13 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 					value={form.website}
 					onChange={handleChange}
 				/>
+				<label htmlFor='email'>Email</label>
+				<input
+					type='text'
+					name='email'
+					value={form.email}
+					onChange={handleChange}
+				/>
 				<h3>Address</h3>
 				<label htmlFor='line_1'>Line 1</label>
 				<input
@@ -178,7 +190,6 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 					name='line_2'
 					value={form.line_2}
 					onChange={handleChange}
-					required
 				/>
 				<label htmlFor='town'>Town</label>
 				<input
@@ -206,6 +217,46 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 					onChange={handleChange}
 					required
 				/>
+
+				<fieldset>
+					<legend>Business Category</legend>
+					<input
+						type='radio'
+						id='restaurant'
+						name='category'
+						value='restaurant'
+						checked={form.category === 'restaurant'}
+						onChange={handleChange}
+					/>
+					<label htmlFor='restaurant'>Restaurant</label>
+					<input
+						type='radio'
+						id='shop'
+						name='category'
+						value='shop'
+						checked={form.category === 'shop'}
+						onChange={handleChange}
+					/>
+					<label htmlFor='shop'>Shop</label>
+					<input
+						type='radio'
+						id='service'
+						name='category'
+						value='service'
+						checked={form.category === 'service'}
+						onChange={handleChange}
+					/>
+					<label htmlFor='service'>Service</label>
+					<input
+						type='radio'
+						id='other'
+						name='category'
+						value='other'
+						checked={form.category === 'other' || form.category === undefined}
+						onChange={handleChange}
+					/>
+					<label htmlFor='other'>Other</label>
+				</fieldset>
 				<br />
 				<button type='submit'>Submit</button>
 			</form>
