@@ -3,18 +3,32 @@ import Link from 'next/link';
 import styles from '../../styles/Card.module.css';
 
 const Card = ({ business }) => {
+	function bioCharacterLimit() {
+		if (business.bio.length > 150) return '...';
+		else return '';
+	}
+
+	const {
+		name,
+		address: { town },
+		category,
+		bio,
+	} = business;
 	return (
 		<div className={styles.card}>
-			<h5 className={styles.business_name}>{business.name}</h5>
+			<div className={styles.card_content}>
+				<h2 className={styles.business_name}>{name}</h2>
+				<h5 className={styles.business_town}>{town}</h5>
+				<h5 className={styles.business_category}>
+					{category && `(${category[0].toUpperCase() + category.substring(1)})`}
+				</h5>
+				<p className={styles.bio}>
+					{bio && `${bio.slice(0, 150)}${bioCharacterLimit()}`}
+				</p>
+			</div>
 			<div className={styles.buttons}>
-				<h3>See Page:</h3>
 				<Link href='/[id]' as={`/${business._id}`}>
-					<button>View</button>
-				</Link>
-				{/* Edit */}
-				<h3>Edit Content:</h3>
-				<Link href='/[id]/edit' as={`/${business._id}/edit`}>
-					<button>Edit</button>
+					<button className={styles.button}>View Business</button>
 				</Link>
 			</div>
 		</div>

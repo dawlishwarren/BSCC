@@ -101,11 +101,6 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 		}
 	};
 
-	// TO FIX:
-	// State not updating properly, creating a new field rather than updating form state field
-	// Should aim to rewrite the form state to avoid nested properties
-	// Needs to be done in a way that ensures the form data fits the Business model
-
 	const handleChange = (e) => {
 		e.preventDefault();
 		const target = e.target;
