@@ -11,8 +11,11 @@ import {
 } from 'react-icons/ai';
 
 // TO DO:
-
-// 4. Optional: Z-A sorting
+// 3. Look at navbar
+// fix scroll
+// make sure all links work
+// 4. look at bugs on edit/directory load
+// Style
 
 export default function Directory({ businesses }) {
 	// State
@@ -42,11 +45,27 @@ export default function Directory({ businesses }) {
 					}),
 				};
 			}
+			case 'sortByNameReverse': {
+				return {
+					...state,
+					data: state.data.sort((a, b) => {
+						return b.name > a.name ? 1 : -1;
+					}),
+				};
+			}
 			case 'sortByTown': {
 				return {
 					...state,
 					data: state.data.sort((a, b) => {
 						return a.address.town > b.address.town ? 1 : -1;
+					}),
+				};
+			}
+			case 'sortByTownReverse': {
+				return {
+					...state,
+					data: state.data.sort((a, b) => {
+						return b.address.town > a.address.town ? 1 : -1;
 					}),
 				};
 			}
@@ -57,7 +76,7 @@ export default function Directory({ businesses }) {
 
 	// SORTING
 	// By name
-	function sortByName(reverse) {
+	function sortByName() {
 		dispatch({
 			type: 'sortByName',
 		});
@@ -68,7 +87,17 @@ export default function Directory({ businesses }) {
 			type: 'sortByTown',
 		});
 	}
+	function sortByNameReverse() {
+		dispatch({
+			type: 'sortByNameReverse',
+		});
+	}
 
+	function sortByTownReverse() {
+		dispatch({
+			type: 'sortByTownReverse',
+		});
+	}
 	// FILTERING
 	function filterByCategory(e) {
 		dispatch({
@@ -81,44 +110,51 @@ export default function Directory({ businesses }) {
 		<Layout>
 			<h1>Business Directory</h1>
 			<div className={styles.options_container}>
-				{/* Sorting Options */}
 				<div className={styles.buttons_container}>
-					<h2>Sort by:</h2>
-					<button id='sort-name-a-z' className={styles.sort_button}>
-						<div className={styles.button_name}>
-							<p>Name</p>
+					{/* Sorting Options */}
+					<div className={styles.sort_container}>
+						<h2>Sort by:</h2>
+						<div className={styles.sort_button}>
+							<div className={styles.button_name}>
+								<p>Name:</p>
+							</div>
+							<AiOutlineSortAscending
+								className={styles.icon}
+								onClick={sortByName}
+							/>
+							<AiOutlineSortDescending
+								className={styles.icon}
+								onClick={sortByNameReverse}
+							/>
 						</div>
-						<AiOutlineSortAscending className={styles.button_icon} />
-						<AiOutlineSortDescending className={styles.button_icon} />
-					</button>
-					<button
-						onClick={sortByTown}
-						id='sort-town-a-z'
-						className={styles.sort_button}>
-						<div className={styles.button_name}>
-							<p>Town</p>
+						<div className={styles.sort_button}>
+							<div className={styles.button_name}>
+								<p>Town:</p>
+							</div>
+							<AiOutlineSortAscending
+								className={styles.icon}
+								onClick={sortByTown}
+							/>
+							<AiOutlineSortDescending
+								className={styles.icon}
+								onClick={sortByTownReverse}
+							/>
 						</div>
-						<div className={styles.button_icon}>
-							<AiOutlineSortAscending />
-						</div>
-						<div className={styles.button_icon}>
-							<AiOutlineSortDescending />
-						</div>
-					</button>
-
+					</div>
 					{/* Filtering options */}
-					<h2>Filter by:</h2>
-					<select
-						name='category'
-						onChange={filterByCategory}
-						className={styles.filter_button}>
-						<option value='restaurant'>Restaurant</option>
-						<option value='shop'>Shop</option>
-						<option value='service'>Service</option>
-						<option value='none' selected>
-							No Filter
-						</option>
-					</select>
+					<div className={styles.filter_container}>
+						<h2>Filter by:</h2>
+						<select
+							name='category'
+							onChange={filterByCategory}
+							className={styles.filter_button}
+							defaultValue='none'>
+							<option value='restaurant'>Restaurant</option>
+							<option value='shop'>Shop</option>
+							<option value='service'>Service</option>
+							<option value='none'>No Filter</option>
+						</select>
+					</div>
 				</div>
 			</div>
 

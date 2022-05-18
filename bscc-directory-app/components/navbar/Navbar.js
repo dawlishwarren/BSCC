@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import styles from '../../styles/Navbar.module.css';
 
-const Navbar = () => {
+const Navbar = ({ home }) => {
+	// To achieve
+	// If home === true use state to trigger a style update for scroll effect
+	// Else display a normal fixed navbar without scroll effect
+
 	const [navbar, setNavbar] = useState(false);
 
 	const changeBackground = () => {
@@ -21,6 +25,7 @@ const Navbar = () => {
 		window.addEventListener('scroll', changeBackground);
 	}, []);
 	return (
+		// if home ? :
 		<div
 			className={`${[styles.navbar]} ${[
 				navbar ? styles.transparent : styles.opaque,

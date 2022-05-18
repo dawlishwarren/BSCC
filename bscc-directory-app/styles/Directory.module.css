@@ -1,68 +1,87 @@
+/* Container classes */
 .options_container {
 	display: flex;
 	width: 100vw;
 	align-items: center;
 	justify-content: center;
+	flex-direction: row;
+	border-bottom: 2px solid orange;
+	margin-bottom: 4rem;
 }
 
 .buttons_container {
 	display: flex;
-	width: 50vw;
-	justify-content: center;
-	align-items: center;
+	width: 60vw;
+	justify-content: space-between;
 }
 
+.sort_container,
+.filter_container {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+.sort_container > *,
+.filter_container > * {
+	margin: 1rem;
+}
+
+/* Button and icon styling */
+/* Shared styles */
 .sort_button,
 .filter_button {
 	background-color: orange;
 	border: none;
-	color: white;
-	padding: 0 1rem;
-	margin: 0 1rem;
-	text-align: center;
-	font-size: 1rem;
-}
-.filter_button {
+	border-radius: 12.5px;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	text-decoration: none;
-}
-
-.sort_button {
-	border: solid 2px white;
-	display: grid;
-	grid-template-columns: 3fr 1fr;
-	grid-template-rows: 1fr 1fr;
-	justify-content: end;
-	align-content: center;
-}
-.button_name {
-	border-right: white solid 2px;
-	grid-column: 1 / span 1;
-	grid-row: 1 / span 3;
-	padding: 0 1rem;
-	opacity: 0.6;
+	font-size: 1.2rem;
+	opacity: 0.9;
 	transition: 0.3s;
-	cursor: pointer;
 }
-.button_icon {
-	height: 1.5rem;
-	width: 1.5rem;
-	opacity: 0.6;
-	transition: 0.3s;
-	cursor: pointer;
-	vertical-align: middle;
-}
-.sort_button:nth-child(2) {
-	border-bottom: 1px solid white;
-}
-
+.sort_button:hover,
+.filter_button:hover,
 .button_name:hover,
-.button_icon:hover .filter_button:hover {
+.icon:hover {
 	opacity: 1;
 }
+/* Sort Button */
+.sort_button {
+	padding: 0 0.5rem;
+	align-items: center;
+}
+.sort_button > * {
+	margin: 0 0.5rem;
+}
 
+.button_name {
+	color: white;
+	cursor: default;
+	font-size: 1.2rem;
+}
+.icon {
+	opacity: 0.6;
+	transition: 0.3s;
+	color: white;
+	cursor: pointer;
+	height: 2.4rem;
+	width: 2.4rem;
+	display: block;
+	margin: auto;
+}
+
+/* Filter button */
+.filter_button {
+	background-color: orange;
+	border: none;
+	color: white;
+	text-align: center;
+	font-size: 1rem;
+	padding: 1rem;
+}
+
+/* Add button */
 .add_button {
 	background-color: green;
 	opacity: 0.6;
