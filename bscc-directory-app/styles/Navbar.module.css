@@ -1,5 +1,5 @@
-.navbar {
-	position: fixed;
+.navbar_home,
+.navbar_inner {
 	z-index: 1;
 	width: 100vw;
 	padding: 1rem;
@@ -7,6 +7,10 @@
 	flex-direction: row;
 	justify-content: space-between;
 	font-size: 1.2rem;
+}
+
+.navbar_home {
+	position: fixed;
 }
 
 .transparent {
@@ -28,4 +32,22 @@
 .link_item {
 	padding: 1rem;
 	list-style: none;
+	position: relative;
+	cursor: pointer;
+}
+.link_item::after {
+	background: none repeat scroll 0 0 transparent;
+	bottom: 0;
+	content: '';
+	display: block;
+	height: 2px;
+	left: 50%;
+	position: absolute;
+	background: orange;
+	transition: width 0.3s ease 0s, left 0.3s ease 0s;
+	width: 0;
+}
+.link_item:hover:after {
+	width: 100%;
+	left: 0;
 }

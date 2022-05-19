@@ -1,12 +1,14 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import dbConnect from '../../lib/dbConnect';
 import Business from '../../models/Business';
-import { stringifyQuery } from 'next/dist/server/server-route-utils';
+import Layout from '../../components/layout/layout';
+import styles from '../../styles/Business.module.css';
 
 export default function BusinessPage({ business }) {
 	const router = useRouter();
+	const [sentences, setSentences] = useState([]);
 	const [message, setMessage] = useState('');
 	const handleDelete = async () => {
 		const businessID = router.query.id;
@@ -18,6 +20,7 @@ export default function BusinessPage({ business }) {
 			setMessage('Failed to delete the business, please check the console');
 		}
 	};
+	// Prop destructuring
 	const {
 		name,
 		bio,
@@ -25,11 +28,37 @@ export default function BusinessPage({ business }) {
 		address: { line_1, line_2, town, postcode },
 		category,
 	} = business;
+
+	function bioToParagraph() {
+		let split = bio.split('.');
+		setSentences(split);
+	}
+	useEffect(() => {
+		bioToParagraph();
+		return () => {
+			setSentences([]);
+		};
+	}, []);
+
+	// JSX
 	return (
-		<>
-			<div key={business._id}>
-				<h1>{name}</h1>
-				<p>{bio}</p>
+		<Layout>
+			<div className={styles.business_container} key={business._id}>
+				<div className={styles.header}>
+					<h1 className={styles.name}>{name}</h1>
+					{category ? (
+						<p className={styles.category}>
+							({category[0].toUpperCase() + category.substring(1)})
+						</p>
+					) : (
+						<p></p>
+					)}
+				</div>
+				<div className={styles.bio_container}>
+					{sentences.map((sentence) => {
+						return <p>{sentence}.</p>;
+					})}
+				</div>
 				<h3>Contact:</h3>
 				<p>{phone}</p>
 				<p>{website}</p>
@@ -40,11 +69,6 @@ export default function BusinessPage({ business }) {
 				<p>{line_2}</p>
 				<p>{town}</p>
 				<p>{postcode}</p>
-				{category ? (
-					<p>{category[0].toUpperCase() + category.substring(1)}</p>
-				) : (
-					<p>No category</p>
-				)}
 			</div>
 			<div>
 				<Link href='/[id]/edit' as={`/${business._id}/edit`}>
@@ -52,7 +76,7 @@ export default function BusinessPage({ business }) {
 				</Link>
 				<button onClick={handleDelete}>Delete</button>
 			</div>
-		</>
+		</Layout>
 	);
 }
 

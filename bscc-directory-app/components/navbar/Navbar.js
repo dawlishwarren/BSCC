@@ -2,17 +2,31 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import styles from '../../styles/Navbar.module.css';
 
-const Navbar = ({ home }) => {
-	// To achieve
-	// If home === true use state to trigger a style update for scroll effect
-	// Else display a normal fixed navbar without scroll effect
+const Navbar = ({ home, pageName }) => {
+	// Determine navbar state based on props before mounting
+	useEffect(() => {
+		beforeHydration();
+		return () => {
+			setNavigationState({ currentPage: '', navItems: [] });
+			setNavbar(true);
+		};
+	}, []);
+	const beforeHydration = () => {
+		window.addEventListener('scroll', changeBackground);
+		hideCurrentPageName(pageName);
+	};
+	const [navbar, setNavbar] = useState(true);
+	const [navigationState, setNavigationState] = useState({
+		currentPage: '',
+		navItems: [],
+	});
 
-	const [navbar, setNavbar] = useState(false);
-
+	// Change background opacity based on scroll value
 	const changeBackground = () => {
 		if (window.scrollY <= 80) setNavbar(true);
 		else setNavbar(false);
 	};
+	// Hide the current page on the navigation menu
 	const navItems = [
 		{ name: 'Home', path: '/' },
 		{ name: 'Directory', path: '/directory' },
@@ -20,27 +34,49 @@ const Navbar = ({ home }) => {
 		{ name: 'Membership', path: '/#membership' },
 		{ name: 'Contact', path: '/contact' },
 	];
+	function hideCurrentPageName(pn) {
+		const filtered = navItems.filter((navItem) => navItem.name != pn);
+		setNavigationState({
+			...navigationState,
+			currentPage: pn,
+			navItems: filtered,
+		});
+	}
 
-	useEffect(() => {
-		window.addEventListener('scroll', changeBackground);
-	}, []);
+	// Return a navbar dependent on home or inner page value
 	return (
-		// if home ? :
-		<div
-			className={`${[styles.navbar]} ${[
-				navbar ? styles.transparent : styles.opaque,
-			]}`}>
-			<div className={styles.logo}>Logo</div>
-			<div className={styles.links}>
-				{navItems.map((item, index) => {
-					return (
-						<Link href={item.path} key={index}>
-							<li className={styles.link_item}>{item.name}</li>
-						</Link>
-					);
-				})}
-			</div>
-		</div>
+		<>
+			{home ? (
+				<div
+					className={`${[styles.navbar_home]} ${[
+						navbar ? styles.transparent : styles.opaque,
+					]}`}>
+					<div className={styles.logo}>Logo</div>
+					<div className={styles.links}>
+						{navigationState.navItems.map((item, index) => {
+							return (
+								<Link href={item.path} key={index}>
+									<li className={styles.link_item}>{item.name}</li>
+								</Link>
+							);
+						})}
+					</div>
+				</div>
+			) : (
+				<div className={styles.navbar_inner}>
+					<div className={styles.logo}>Logo</div>
+					<div className={styles.links}>
+						{navigationState.navItems.map((item, index) => {
+							return (
+								<Link href={item.path} key={index}>
+									<li className={styles.link_item}>{item.name}</li>
+								</Link>
+							);
+						})}
+					</div>
+				</div>
+			)}
+		</>
 	);
 };
 

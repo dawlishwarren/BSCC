@@ -1,0 +1,23 @@
+.business_container {
+	border: 1px solid black;
+}
+
+.header {
+	display: flex;
+	width: 100%;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	margin-bottom: 3rem;
+}
+
+.name {
+	margin: 3rem 0 0 1rem;
+}
+.category {
+	margin: 0;
+}
+.bio_container {
+	margin: 2rem;
+	text-align: left;
+}

@@ -10,13 +10,6 @@ import {
 	AiOutlineSortDescending,
 } from 'react-icons/ai';
 
-// TO DO:
-// 3. Look at navbar
-// fix scroll
-// make sure all links work
-// 4. look at bugs on edit/directory load
-// Style
-
 export default function Directory({ businesses }) {
 	// State
 	const initialState = { data: businesses };
@@ -107,7 +100,7 @@ export default function Directory({ businesses }) {
 	}
 
 	return (
-		<Layout>
+		<Layout pageName='Directory'>
 			<h1>Business Directory</h1>
 			<div className={styles.options_container}>
 				<div className={styles.buttons_container}>
