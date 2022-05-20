@@ -1,0 +1,60 @@
+/* Form */
+.form {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: 1fr 1fr 1fr 1fr auto auto;
+}
+/* Areas and label */
+.label {
+	padding-bottom: 0.5rem;
+}
+.form_area {
+	display: flex;
+	flex-direction: column;
+	padding: 1rem;
+}
+.form_area:nth-last-child(2) {
+	grid-column: 1 / span 2;
+}
+.submit {
+	grid-column: 1 / span 2;
+	padding: 0;
+	height: 25%;
+	width: 25%;
+	background: none;
+	border-radius: none;
+	border: 1px solid orange;
+	margin: auto;
+	cursor: pointer;
+	transition: all 0.5s;
+	transition: background 1.3s, color 1.3s;
+}
+.submit:hover {
+	border: 2px solid orange;
+	border-radius: 25px;
+	background: orange;
+	color: white;
+	height: 37.5%;
+	width: 37.5%;
+}
+/* Inputs */
+.input_field[type='message'] {
+	height: 100%;
+	width: 100%;
+	grid-column: 1 / span 2;
+	font-family: 'Bilo Light', sans-serif;
+}
+
+.input_field[type='text'],
+.input_field[type='email'] {
+	border: none;
+	border-bottom: solid 1px orange;
+	padding: 1rem;
+}
+
+.input_field[type='text']:focus,
+.input_field[type='email']:focus {
+	border: solid 1px orange;
+	outline: none;
+	padding-top: calc(1rem - 1px);
+}

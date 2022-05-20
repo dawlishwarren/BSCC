@@ -5,7 +5,7 @@
 	overflow: hidden;
 	border: 1.25px solid rgb(233, 233, 233);
 	border-radius: 16px;
-	margin: 10px;
+	margin: 10px 0px 10px 20px;
 	transition: 0.5s all;
 	--shadow: transparent;
 	box-shadow: 0 0 10px 5px var(--shadow);
@@ -50,7 +50,7 @@
 	bottom: 1rem;
 	left: 50%;
 	transform: translateX(-50%);
-	background-color: orange;
+	background-color: teal;
 	border: none;
 	border-radius: 25px;
 	color: white;
