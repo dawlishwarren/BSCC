@@ -5,7 +5,6 @@ import styles from '../styles/Home.module.css';
 import Layout from '../components/layout/layout';
 import About from '../components/about/about';
 import Membership from '../components/membership/Membership';
-import Session from '../components/session/Session';
 
 export default function Home() {
 	return (

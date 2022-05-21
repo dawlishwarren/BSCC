@@ -1,7 +1,32 @@
-import styles from '../styles/Form.module.css';
-export default function PageWithoutJSbasedForm() {
+import styles from '../../styles/Form.module.css';
+
+export default function PageWithJSbasedForm() {
+	// Submit handler
+	const handleSubmit = async (event) => {
+		event.preventDefault();
+		const data = {
+			name: event.target.name.value,
+			email: event.target.email.value,
+			phone: event.target.phone.value,
+			subject: event.target.subject.value,
+			message: event.target.message.value,
+		};
+		const JSONdata = JSON.stringify(data);
+		const endpoint = '/api/email/form';
+		const options = {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSONdata,
+		};
+		const response = await fetch(endpoint, options);
+		const result = await response.json();
+		alert(`Message: ${result.data}`);
+	};
+
 	return (
-		<form action='/api/email/form' className={styles.form}>
+		<form onSubmit={handleSubmit} className={styles.form}>
 			<div className={styles.form_area}>
 				<label className={styles.label} htmlFor='name'>
 					Your name

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import styles from '../../styles/Navbar.module.css';
+import Login from '../auth/Login';
 
 const Navbar = ({ home, pageName }) => {
 	// Determine navbar state based on props before mounting
@@ -60,6 +61,7 @@ const Navbar = ({ home, pageName }) => {
 								</Link>
 							);
 						})}
+						<Login />
 					</div>
 				</div>
 			) : (
@@ -73,6 +75,7 @@ const Navbar = ({ home, pageName }) => {
 								</Link>
 							);
 						})}
+						<Login />
 					</div>
 				</div>
 			)}
