@@ -23,16 +23,16 @@
 	width: 25%;
 	background: none;
 	border-radius: none;
-	border: 1px solid orange;
+	border: 1px solid teal;
 	margin: auto;
 	cursor: pointer;
 	transition: all 0.5s;
 	transition: background 1.3s, color 1.3s;
 }
 .submit:hover {
-	border: 2px solid orange;
+	border: 2px solid teal;
 	border-radius: 25px;
-	background: orange;
+	background: teal;
 	color: white;
 	height: 37.5%;
 	width: 37.5%;
@@ -48,13 +48,13 @@
 .input_field[type='text'],
 .input_field[type='email'] {
 	border: none;
-	border-bottom: solid 1px orange;
+	border-bottom: solid 1px teal;
 	padding: 1rem;
 }
 
 .input_field[type='text']:focus,
 .input_field[type='email']:focus {
-	border: solid 1px orange;
+	border: solid 1px teal;
 	outline: none;
 	padding-top: calc(1rem - 1px);
 }

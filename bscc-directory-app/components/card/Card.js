@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import styles from '../../styles/Card.module.css';
+import styles from '../card/Card.module.css';
 
 const Card = ({ business }) => {
 	function bioCharacterLimit() {

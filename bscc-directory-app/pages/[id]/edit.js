@@ -7,7 +7,7 @@ const fetcher = (url) =>
 		.then((res) => res.json())
 		.then((json) => json.data);
 
-export default function EditBusiness() {
+const EditBusiness = () => {
 	const router = useRouter();
 	const { id } = router.query;
 	const { data: business, error } = useSWR(
@@ -41,4 +41,6 @@ export default function EditBusiness() {
 			forNewBusiness={false}
 		/>
 	);
-}
+};
+
+export default EditBusiness;

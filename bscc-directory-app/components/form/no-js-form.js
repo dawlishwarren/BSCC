@@ -1,4 +1,4 @@
-import styles from '../../styles/Form.module.css';
+import styles from './Form.module.css';
 export default function PageWithoutJSbasedForm() {
 	return (
 		<form action='/api/email/form' className={styles.form}>

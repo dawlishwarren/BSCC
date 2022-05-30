@@ -1,13 +1,4 @@
-.back_button_container {
-	display: flex;
-	align-items: center;
-}
-
-.back_button_text {
-	font-size: 1.5rem;
-	padding-left: 1rem;
-}
-
+/* * * * * * * * * * * * * * * */
 /* Name and category */
 .header {
 	display: flex;
@@ -36,6 +27,7 @@
 	margin: 0;
 }
 
+/* * * * * * * * * * * * * * * */
 /* Content */
 .content_container {
 	display: grid;
@@ -64,7 +56,8 @@
 	padding: 2rem;
 }
 
-/* Buttons */
+/* * * * * * * * * * * * * * * */
+/* Edit and Delete Buttons */
 .buttons_container {
 	display: flex;
 }

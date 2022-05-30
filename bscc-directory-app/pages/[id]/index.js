@@ -50,9 +50,9 @@ export default function BusinessPage({ business }) {
 	// JSX
 	return (
 		<Layout>
-			<div className={styles.back_button_container}>
+			<div className={buttonStyles.back_button_container}>
 				<Button type='back' href='/directory' inner={<BiArrowBack />} />
-				<h4 className={styles.back_button_text}>Back to directory</h4>
+				<h4 className={buttonStyles.back_button_text}>Back to directory</h4>
 			</div>
 			<div className={styles.business_container} key={business._id}>
 				{/* Name and category */}

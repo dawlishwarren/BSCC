@@ -2,6 +2,12 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
 
+import Layout from '../layout/layout';
+import styles from './Form.module.css';
+import buttonStyles from '../button/Button.module.css';
+import Button from '../button/Button';
+import { BiArrowBack } from 'react-icons/bi';
+
 const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 	const { mutate } = useSWRConfig();
 	const router = useRouter();
@@ -136,82 +142,109 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 	};
 
 	return (
-		<>
-			<h2>Business</h2>
-			<form id={formId} onSubmit={handleSubmit}>
-				<label htmlFor='name'>Name</label>
-				<input
-					type='text'
-					name='name'
-					value={form.name}
-					onChange={handleChange}
-					required
-				/>
-				<h3>Contact</h3>
-				<label htmlFor='phone'>Phone</label>
-				<input
-					type='text'
-					name='phone'
-					value={form.phone}
-					onChange={handleChange}
-					required
-				/>
-				<label htmlFor='website'>Website</label>
-				<input
-					type='text'
-					name='website'
-					value={form.website}
-					onChange={handleChange}
-				/>
-				<label htmlFor='email'>Email</label>
-				<input
-					type='text'
-					name='email'
-					value={form.email}
-					onChange={handleChange}
-				/>
-				<h3>Address</h3>
-				<label htmlFor='line_1'>Line 1</label>
-				<input
-					type='text'
-					name='line_1'
-					value={form.line_1}
-					onChange={handleChange}
-					required
-				/>
-				<label htmlFor='line_2'>Line 2</label>
-				<input
-					type='text'
-					name='line_2'
-					value={form.line_2}
-					onChange={handleChange}
-				/>
-				<label htmlFor='town'>Town</label>
-				<input
-					type='text'
-					name='town'
-					value={form.town}
-					onChange={handleChange}
-					required
-				/>
-				<label htmlFor='postcode'>Postcode</label>
-				<input
-					type='text'
-					name='postcode'
-					value={form.postcode}
-					onChange={handleChange}
-					required
-				/>
-				<br />
-				<h3>Details</h3>
-				<label htmlFor='bio'>Bio</label>
-				<input
-					type='text'
-					name='bio'
-					value={form.bio}
-					onChange={handleChange}
-					required
-				/>
+		<Layout>
+			{/* Back button */}
+			<div className={buttonStyles.back_button_container}>
+				<Button type='back' href='/directory' inner={<BiArrowBack />} />
+				<h4 className={buttonStyles.back_button_text}>Back to directory</h4>
+			</div>
+			<div className={styles.header}>
+				<h2 className={styles.title}>Business</h2>
+			</div>
+			<form id={formId} onSubmit={handleSubmit} className={styles.form}>
+				<div className={styles.form_area}>
+					<label classname={styles.label} htmlFor='name'>
+						Name
+					</label>
+					<input
+						type='text'
+						name='name'
+						value={form.name}
+						onChange={handleChange}
+						required
+					/>
+					<h3>Contact</h3>
+					<label classname={styles.label} htmlFor='phone'>
+						Phone
+					</label>
+					<input
+						type='text'
+						name='phone'
+						value={form.phone}
+						onChange={handleChange}
+						required
+					/>
+					<label classname={styles.label} htmlFor='website'>
+						Website
+					</label>
+					<input
+						type='text'
+						name='website'
+						value={form.website}
+						onChange={handleChange}
+					/>
+					<label classname={styles.label} htmlFor='email'>
+						Email
+					</label>
+					<input
+						type='text'
+						name='email'
+						value={form.email}
+						onChange={handleChange}
+					/>
+					<h3>Address</h3>
+					<label classname={styles.label} htmlFor='line_1'>
+						Line 1
+					</label>
+					<input
+						type='text'
+						name='line_1'
+						value={form.line_1}
+						onChange={handleChange}
+						required
+					/>
+					<label classname={styles.label} htmlFor='line_2'>
+						Line 2
+					</label>
+					<input
+						type='text'
+						name='line_2'
+						value={form.line_2}
+						onChange={handleChange}
+					/>
+					<label classname={styles.label} htmlFor='town'>
+						Town
+					</label>
+					<input
+						type='text'
+						name='town'
+						value={form.town}
+						onChange={handleChange}
+						required
+					/>
+					<label classname={styles.label} htmlFor='postcode'>
+						Postcode
+					</label>
+					<input
+						type='text'
+						name='postcode'
+						value={form.postcode}
+						onChange={handleChange}
+						required
+					/>
+					<br />
+					<h3>Details</h3>
+					<label classname={styles.label} htmlFor='bio'>
+						Bio
+					</label>
+					<input
+						type='text'
+						name='bio'
+						value={form.bio}
+						onChange={handleChange}
+						required
+					/>
+				</div>
 
 				<fieldset>
 					<legend>Business Category</legend>
@@ -255,7 +288,7 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 				<br />
 				<button type='submit'>Submit</button>
 			</form>
-		</>
+		</Layout>
 	);
 };
 

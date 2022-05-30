@@ -2,14 +2,16 @@ import React from 'react';
 import styles from '../../styles/Home.module.css';
 
 const About = () => {
+	const today = new Date();
+	const founded = today.getFullYear() - 1911;
 	return (
 		<section id='about'>
 			<div className={[styles.container, styles.section_1].join(' ')}>
 				<h2>Who are we?</h2>
 				<p>
 					The Budleigh Salterton and District Chamber of Commerce has been in
-					existence for 111 years, representing local businesses and plays an
-					important role within the Community, working alongside other
+					existence for {founded} years, representing local businesses and plays
+					an important role within the Community, working alongside other
 					interested organisations in the town to promote all the interests of
 					the area. We all know what a delightful and unique place Budleigh
 					Salterton is, but fresh input is always welcome.

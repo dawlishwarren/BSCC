@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import highStreet from '../../public/img/highstreet.jpeg';
-import styles from '../../styles/Hero.module.css';
+import styles from './Hero.module.css';
 import { ParallaxBanner } from 'react-scroll-parallax';
 
 const HeroImage = () => {

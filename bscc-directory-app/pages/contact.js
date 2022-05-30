@@ -1,6 +1,6 @@
 import React from 'react';
 import Layout from '../components/layout/layout';
-import styles from '../styles/Contact.module.css';
+import styles from '../styles/Contactform.module.css';
 import PageWithJSbasedForm from '../components/form/js-form';
 
 const contact = () => {

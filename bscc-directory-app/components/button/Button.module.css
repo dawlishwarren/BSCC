@@ -1,3 +1,15 @@
+/* * * * * * * * * * * * * * * */
+/* Back button display */
+.back_button_container {
+	display: flex;
+	align-items: center;
+}
+
+.back_button_text {
+	font-size: 1.5rem;
+	padding-left: 1rem;
+}
+
 .button {
 	opacity: 0.6;
 	height: 4rem;
