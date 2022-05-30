@@ -1,8 +1,11 @@
-import { useReducer } from 'react';
-import Link from 'next/link';
 import dbConnect from '../lib/dbConnect';
+import { useReducer } from 'react';
+import { useSession } from 'next-auth/react';
 import Business from '../models/Business';
+
+import Link from 'next/link';
 import Card from '../components/card/Card';
+import Button from '../components/button/Button';
 import styles from '../styles/Directory.module.css';
 import Layout from '../components/layout/layout';
 import {
@@ -11,6 +14,7 @@ import {
 } from 'react-icons/ai';
 
 export default function Directory({ businesses }) {
+	const { data: session } = useSession();
 	// State
 	const initialState = { data: businesses };
 	const [state, dispatch] = useReducer(reducer, initialState);
@@ -152,15 +156,26 @@ export default function Directory({ businesses }) {
 			</div>
 
 			{/* Map */}
-			{state.data.map((business) => (
-				<Card business={business} key={business._id} />
-			))}
+			<>
+				{state.data.map((business) => (
+					<Card business={business} key={business._id} />
+				))}
+			</>
 
 			{/* New Business POST route */}
-			<h2>Add a new Business:</h2>
-			<Link href='/new'>
-				<button className={styles.add_button}>+</button>
-			</Link>
+			{session ? (
+				<>
+					<h2>Add a new Business:</h2>
+					<Button type='add' href='/new' inner='+' />
+				</>
+			) : (
+				<h2>
+					<Link href='/api/auth/signin'>
+						<a className={styles.login_link}>Log in</a>
+					</Link>{' '}
+					to add a new business
+				</h2>
+			)}
 		</Layout>
 	);
 }

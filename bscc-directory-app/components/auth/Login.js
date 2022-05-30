@@ -5,7 +5,6 @@ import { signOut, useSession } from 'next-auth/react';
 
 const Login = () => {
 	const { data: session } = useSession();
-	console.log('session', session);
 
 	{
 		/* Sign in / out button */

@@ -1,0 +1,52 @@
+.button {
+	opacity: 0.6;
+	height: 4rem;
+	width: 4rem;
+	border: none;
+	border-radius: 50%;
+	font-size: 2rem;
+	transition: 0.3s;
+}
+.button:hover {
+	font-size: 2.5rem;
+	opacity: 1;
+	cursor: pointer;
+}
+
+.add {
+	background-color: green;
+	color: white;
+}
+
+.back {
+	background-color: teal; /* Eventually to be replaced by Primary */
+	color: white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.edit {
+	background-color: orange;
+	color: white;
+}
+.delete {
+	background-color: red;
+	color: white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.icon {
+	opacity: 0.6;
+	transition: 0.3s;
+	color: white;
+	cursor: pointer;
+	height: 2.4rem;
+	width: 2.4rem;
+	display: block;
+	margin: auto;
+}
+.icon:hover {
+	opacity: 1;
+}

@@ -2,38 +2,10 @@
 	display: flex;
 	align-items: center;
 }
-.back_button {
-	background-color: teal;
-	opacity: 0.6;
-	height: 4rem;
-	width: 4rem;
-	border: none;
-	border-radius: 50%;
-	color: white;
-	font-size: 2rem;
-	transition: 0.3s;
-}
+
 .back_button_text {
 	font-size: 1.5rem;
 	padding-left: 1rem;
-}
-.back_button:hover {
-	font-size: 3rem;
-	opacity: 1;
-	cursor: pointer;
-}
-.icon {
-	opacity: 0.6;
-	transition: 0.3s;
-	color: white;
-	cursor: pointer;
-	height: 2.4rem;
-	width: 2.4rem;
-	display: block;
-	margin: auto;
-}
-.icon:hover {
-	opacity: 1;
 }
 
 /* Name and category */
@@ -90,4 +62,12 @@
 .address_container,
 .contact_container {
 	padding: 2rem;
+}
+
+/* Buttons */
+.buttons_container {
+	display: flex;
+}
+.buttons_container > * {
+	margin: 1rem;
 }
