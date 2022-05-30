@@ -5,6 +5,7 @@ import useSWR, { useSWRConfig } from 'swr';
 import Layout from '../layout/layout';
 import styles from './Form.module.css';
 import buttonStyles from '../button/Button.module.css';
+import formStyles from '../../styles/utils/Forms.module.css';
 import Button from '../button/Button';
 import { BiArrowBack } from 'react-icons/bi';
 
@@ -149,144 +150,188 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 				<h4 className={buttonStyles.back_button_text}>Back to directory</h4>
 			</div>
 			<div className={styles.header}>
-				<h2 className={styles.title}>Business</h2>
+				<h2 className={styles.title}>
+					{forNewBusiness
+						? `Add Business: ${form.name}`
+						: `Edit Business: ${form.name}`}{' '}
+				</h2>
 			</div>
 			<form id={formId} onSubmit={handleSubmit} className={styles.form}>
 				<div className={styles.form_area}>
-					<label classname={styles.label} htmlFor='name'>
-						Name
-					</label>
-					<input
-						type='text'
-						name='name'
-						value={form.name}
-						onChange={handleChange}
-						required
-					/>
-					<h3>Contact</h3>
-					<label classname={styles.label} htmlFor='phone'>
-						Phone
-					</label>
-					<input
-						type='text'
-						name='phone'
-						value={form.phone}
-						onChange={handleChange}
-						required
-					/>
-					<label classname={styles.label} htmlFor='website'>
-						Website
-					</label>
-					<input
-						type='text'
-						name='website'
-						value={form.website}
-						onChange={handleChange}
-					/>
-					<label classname={styles.label} htmlFor='email'>
-						Email
-					</label>
-					<input
-						type='text'
-						name='email'
-						value={form.email}
-						onChange={handleChange}
-					/>
-					<h3>Address</h3>
-					<label classname={styles.label} htmlFor='line_1'>
-						Line 1
-					</label>
-					<input
-						type='text'
-						name='line_1'
-						value={form.line_1}
-						onChange={handleChange}
-						required
-					/>
-					<label classname={styles.label} htmlFor='line_2'>
-						Line 2
-					</label>
-					<input
-						type='text'
-						name='line_2'
-						value={form.line_2}
-						onChange={handleChange}
-					/>
-					<label classname={styles.label} htmlFor='town'>
-						Town
-					</label>
-					<input
-						type='text'
-						name='town'
-						value={form.town}
-						onChange={handleChange}
-						required
-					/>
-					<label classname={styles.label} htmlFor='postcode'>
-						Postcode
-					</label>
-					<input
-						type='text'
-						name='postcode'
-						value={form.postcode}
-						onChange={handleChange}
-						required
-					/>
-					<br />
-					<h3>Details</h3>
-					<label classname={styles.label} htmlFor='bio'>
-						Bio
-					</label>
-					<input
-						type='text'
-						name='bio'
-						value={form.bio}
-						onChange={handleChange}
-						required
-					/>
-				</div>
+					<div className={styles.bio_container}>
+						<div className={styles.subtitle_container}>
+							<h3 className={styles.subtitle}>Details:</h3>
+						</div>
+						<label className={formStyles.label} htmlFor='name'>
+							Name
+						</label>
+						<input
+							className={formStyles.input_field}
+							type='text'
+							name='name'
+							value={form.name}
+							onChange={handleChange}
+							required
+						/>
+						<label className={formStyles.label} htmlFor='bio'>
+							Bio
+						</label>
+						<textarea
+							className={formStyles.textarea}
+							type='text'
+							name='bio'
+							value={form.bio}
+							onChange={handleChange}
+							required
+						/>
+					</div>
 
-				<fieldset>
-					<legend>Business Category</legend>
-					<input
-						type='radio'
-						id='restaurant'
-						name='category'
-						value='restaurant'
-						checked={form.category === 'restaurant'}
-						onChange={handleChange}
-					/>
-					<label htmlFor='restaurant'>Restaurant</label>
-					<input
-						type='radio'
-						id='shop'
-						name='category'
-						value='shop'
-						checked={form.category === 'shop'}
-						onChange={handleChange}
-					/>
-					<label htmlFor='shop'>Shop</label>
-					<input
-						type='radio'
-						id='service'
-						name='category'
-						value='service'
-						checked={form.category === 'service'}
-						onChange={handleChange}
-					/>
-					<label htmlFor='service'>Service</label>
-					<input
-						type='radio'
-						id='other'
-						name='category'
-						value='other'
-						checked={form.category === 'other' || form.category === undefined}
-						onChange={handleChange}
-					/>
-					<label htmlFor='other'>Other</label>
-				</fieldset>
-				<br />
-				<button type='submit'>Submit</button>
+					<div className={styles.contact_container}>
+						<div className={styles.subtitle_container}>
+							<h3 className={styles.subtitle}>Contact:</h3>
+						</div>
+						<label className={formStyles.label} htmlFor='phone'>
+							Phone
+						</label>
+						<input
+							className={formStyles.input_field}
+							type='text'
+							name='phone'
+							value={form.phone}
+							onChange={handleChange}
+							required
+							placeholder='01395 000000'
+						/>
+						<label className={formStyles.label} htmlFor='website'>
+							Website
+						</label>
+						<input
+							className={formStyles.input_field}
+							type='text'
+							name='website'
+							value={form.website}
+							onChange={handleChange}
+							placeholder='www.example.com'
+						/>
+						<label className={formStyles.label} htmlFor='email'>
+							Email
+						</label>
+						<input
+							className={formStyles.input_field}
+							type='text'
+							name='email'
+							value={form.email}
+							onChange={handleChange}
+							placeholder='example@mail.com'
+						/>
+					</div>
+
+					<div className={styles.address_container}>
+						<div className={styles.subtitle_container}>
+							<h3 className={styles.subtitle}>Address:</h3>
+						</div>
+						<label className={formStyles.label} htmlFor='line_1'>
+							Line 1
+						</label>
+						<input
+							className={formStyles.input_field}
+							type='text'
+							name='line_1'
+							value={form.line_1}
+							onChange={handleChange}
+							required
+							placeholder='House Number or Name (or Street if not applicatable)'
+						/>
+						<label className={formStyles.label} htmlFor='line_2'>
+							Line 2
+						</label>
+						<input
+							className={formStyles.input_field}
+							type='text'
+							name='line_2'
+							value={form.line_2}
+							onChange={handleChange}
+							placeholder='Street'
+						/>
+						<label className={formStyles.label} htmlFor='town'>
+							Town
+						</label>
+						<input
+							className={formStyles.input_field}
+							type='text'
+							name='town'
+							value={form.town}
+							onChange={handleChange}
+							required
+							placeholder='Town'
+						/>
+						<label className={formStyles.label} htmlFor='postcode'>
+							Postcode
+						</label>
+						<input
+							className={formStyles.input_field}
+							type='text'
+							name='postcode'
+							value={form.postcode}
+							onChange={handleChange}
+							required
+							placeholder='Postcode'
+						/>
+					</div>
+
+					<div className={styles.fieldset_container}>
+						<div className={styles.subtitle_container}>
+							<h3 className={styles.subtitle}>Business Category:</h3>
+						</div>
+						<fieldset className={styles.fieldset}>
+							<legend>Choose the category that best suits your business</legend>
+							<input
+								type='radio'
+								id='restaurant'
+								name='category'
+								value='restaurant'
+								checked={form.category === 'restaurant'}
+								onChange={handleChange}
+							/>
+							<label htmlFor='restaurant'>Restaurant</label>
+							<input
+								type='radio'
+								id='shop'
+								name='category'
+								value='shop'
+								checked={form.category === 'shop'}
+								onChange={handleChange}
+							/>
+							<label htmlFor='shop'>Shop</label>
+							<input
+								type='radio'
+								id='service'
+								name='category'
+								value='service'
+								checked={form.category === 'service'}
+								onChange={handleChange}
+							/>
+							<label htmlFor='service'>Service</label>
+							<input
+								type='radio'
+								id='other'
+								name='category'
+								value='other'
+								checked={
+									form.category === 'other' || form.category === undefined
+								}
+								onChange={handleChange}
+							/>
+							<label htmlFor='other'>Other</label>
+						</fieldset>
+					</div>
+					<div className={styles.images_container}>
+						<div className={styles.subtitle_container}>
+							<h3 className={styles.subtitle}>Image and Logo:</h3>
+						</div>
+					</div>
+					<button type='submit'>Submit</button>
+				</div>
 			</form>
 		</Layout>
 	);

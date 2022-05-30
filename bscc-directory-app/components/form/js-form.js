@@ -1,4 +1,5 @@
 import styles from './Form.module.css';
+import formStyles from '../../styles/utils/Forms.module.css';
 
 export default function PageWithJSbasedForm() {
 	// Submit handler
@@ -28,52 +29,52 @@ export default function PageWithJSbasedForm() {
 	return (
 		<form onSubmit={handleSubmit} className={styles.form}>
 			<div className={styles.form_area}>
-				<label className={styles.label} htmlFor='name'>
+				<label className={formStyles.label} htmlFor='name'>
 					Your name
 				</label>
 				<input
 					type='text'
 					name='name'
-					className={styles.input_field}
+					className={formStyles.input_field}
 					required
 				/>
 			</div>
 			<div className={styles.form_area}>
-				<label className={styles.label} htmlFor='email'>
+				<label className={formStyles.label} htmlFor='email'>
 					Your email
 				</label>
 				<input
 					type='email'
 					name='email'
-					className={styles.input_field}
+					className={formStyles.input_field}
 					required
 				/>
 			</div>
 			<div className={styles.form_area}>
-				<label className={styles.label} htmlFor='phone'>
+				<label className={formStyles.label} htmlFor='phone'>
 					Phone number
 				</label>
-				<input type='text' name='phone' className={styles.input_field} />
+				<input type='text' name='phone' className={formStyles.input_field} />
 			</div>
 			<div className={styles.form_area}>
-				<label className={styles.label} htmlFor='subject'>
+				<label className={formStyles.label} htmlFor='subject'>
 					Subject
 				</label>
 				<input
 					type='text'
 					name='subject'
-					className={styles.input_field}
+					className={formStyles.input_field}
 					required
 				/>
 			</div>
 			<div className={styles.form_area}>
-				<label className={styles.label} htmlFor='message'>
+				<label className={formStyles.label} htmlFor='message'>
 					Your message
 				</label>
 				<textarea
 					type='text'
 					name='message'
-					className={styles.input_field}
+					className={formStyles.input_field}
 					required
 				/>
 			</div>

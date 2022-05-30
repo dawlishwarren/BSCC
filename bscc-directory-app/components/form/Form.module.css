@@ -1,4 +1,4 @@
-/* Header */
+/* Headers and Titles */
 .header {
 	display: flex;
 	height: 100%;
@@ -9,33 +9,55 @@
 	margin-bottom: 3rem;
 }
 
+.subtitle_container {
+	display: flex;
+}
 .title {
 	margin-top: 1rem;
 	position: relative;
 }
-.title::after {
+.subtitle {
+	font-size: 1.5rem;
+	position: relative;
+}
+.title::after,
+.subtitle::after {
 	position: absolute;
 	content: '';
 	background-color: teal;
 	width: 100%;
 	height: 2px;
 	left: 0;
-	bottom: 0;
+	bottom: -1px;
 }
 
 /* Form and input fields */
-.form {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-}
-.form_area {
+.bio_container,
+.contact_container,
+.address_container,
+.fieldset_container {
 	display: flex;
 	flex-direction: column;
 	padding: 1rem;
 }
+.form {
+	margin: 1rem;
+	padding: 1rem;
+}
+.form_area {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: auto auto;
+	padding: 1rem;
+}
 
-/* Label */
-.label {
-	padding-bottom: 0.5rem;
-	color: red;
+/* Fieldset */
+
+.fieldset {
+	border: solid 1px teal;
+	width: 100%;
+	max-height: 4rem;
+}
+.fieldset > * {
+	padding: 0 0.5rem;
 }
