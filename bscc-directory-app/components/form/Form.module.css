@@ -35,7 +35,10 @@
 .bio_container,
 .contact_container,
 .address_container,
-.fieldset_container {
+.fieldset_container,
+.images_container,
+.thumbs_container,
+.thumbnailInner {
 	display: flex;
 	flex-direction: column;
 	padding: 1rem;
@@ -47,12 +50,17 @@
 .form_area {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	grid-template-rows: auto auto;
+	grid-template-rows: 1fr auto;
 	padding: 1rem;
+}
+.formSubmit {
+	z-index: 0;
+	height: 4rem;
+	width: 4rem;
+	border: none;
 }
 
 /* Fieldset */
-
 .fieldset {
 	border: solid 1px teal;
 	width: 100%;
@@ -60,4 +68,23 @@
 }
 .fieldset > * {
 	padding: 0 0.5rem;
+}
+
+/* Images Container */
+.images_container {
+	grid-column: 2 / span 1;
+}
+
+.image_preview_container {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+}
+
+.image_preview {
+	height: auto;
+	width: 200px;
+	padding: 1rem 1rem 0 0;
 }

@@ -7,7 +7,19 @@ import styles from './Form.module.css';
 import buttonStyles from '../button/Button.module.css';
 import formStyles from '../../styles/utils/Forms.module.css';
 import Button from '../button/Button';
-import { BiArrowBack } from 'react-icons/bi';
+import { BiArrowBack, BiEditAlt } from 'react-icons/bi';
+
+// File uploader:
+// 1. Input field for uploading images.
+// a. As an array for images
+// b. As an string for logo
+// c. Style the inputs
+
+// 2. Validation based on size and file size.
+// 3. Change handler handles images for preview and also form updates
+// 4. Commits to database
+// a. Check that mongodb is best place to handle images
+// b. Otherwise look into CORS solution
 
 const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 	const { mutate } = useSWRConfig();
@@ -15,6 +27,8 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 	const contentType = 'application/json';
 	const [errors, setErrors] = useState({});
 	const [message, setMessage] = useState('');
+	const [imagesSource, setImagesSource] = useState([]);
+	const [logoSource, setLogoSource] = useState();
 
 	const [form, setForm] = useState({
 		name: businessForm.name,
@@ -27,6 +41,7 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 		town: businessForm.address.town,
 		postcode: businessForm.address.postcode,
 		category: businessForm.category,
+		image: businessForm.image,
 	});
 
 	/* The PUT method edits an existing entry in the mongodb database. */
@@ -140,6 +155,30 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 		if (!form.postcode) error.postcode = 'A full address is required';
 		if (!form.bio) error.bio = 'A business description is required';
 		return error;
+	};
+
+	const handleImageChange = (changeEvent) => {
+		for (const file of changeEvent.target.files) {
+			const reader = new FileReader();
+			reader.readAsDataURL(file);
+			reader.onload = () => {
+				setImagesSource((images) => [...images, reader.result]);
+			};
+			reader.onerror = () => {
+				console.log(reader.error);
+			};
+		}
+	};
+	const handleIconChange = (e) => {
+		const file = e.target.files[0];
+		const reader = new FileReader();
+		reader.readAsDataURL(file);
+		reader.onload = () => {
+			setLogoSource(reader.result);
+		};
+		reader.onerror = () => {
+			console.log(reader.error);
+		};
 	};
 
 	return (
@@ -278,7 +317,42 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 							placeholder='Postcode'
 						/>
 					</div>
-
+					{/* ***************************** */}
+					<div className={styles.images_container}>
+						<div className={styles.subtitle_container}>
+							<h3 className={styles.subtitle}>Image and Logo:</h3>
+						</div>
+						<label className={formStyles.label} htmlFor='image'>
+							Business Image
+						</label>
+						<input
+							className={formStyles.input_field}
+							type='file'
+							name='image'
+							onChange={handleImageChange}
+							accept='image/*'
+							multiple
+						/>
+						<div className={styles.image_preview_container}>
+							{imagesSource.map((link, index) => (
+								<img src={link} key={index} className={styles.image_preview} />
+							))}
+						</div>
+						<label className={formStyles.label} htmlFor='image'>
+							Business Icon
+						</label>
+						<input
+							className={formStyles.input_field}
+							type='file'
+							name='icon'
+							onChange={handleIconChange}
+							accept='image/*'
+						/>
+						<div className={styles.image_preview_container}>
+							<img src={logoSource} className={styles.image_preview} />
+						</div>
+					</div>
+					{/* ***************************** */}
 					<div className={styles.fieldset_container}>
 						<div className={styles.subtitle_container}>
 							<h3 className={styles.subtitle}>Business Category:</h3>
@@ -325,12 +399,17 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 							<label htmlFor='other'>Other</label>
 						</fieldset>
 					</div>
-					<div className={styles.images_container}>
-						<div className={styles.subtitle_container}>
-							<h3 className={styles.subtitle}>Image and Logo:</h3>
-						</div>
-					</div>
-					<button type='submit'>Submit</button>
+				</div>
+				{/* Form submit button: styles depend on whether form is Add or Edit */}
+				<div className={buttonStyles.buttons_container}>
+					<button
+						type='submit'
+						className={`${[buttonStyles.button]} ${
+							forNewBusiness ? [buttonStyles.add] : [buttonStyles.edit]
+						}`}>
+						{forNewBusiness ? `+` : <BiEditAlt />}
+					</button>
+					{forNewBusiness ? <h2>Submit new business</h2> : <h2>Submit edit</h2>}
 				</div>
 			</form>
 		</Layout>

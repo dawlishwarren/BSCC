@@ -55,12 +55,3 @@
 .contact_container {
 	padding: 2rem;
 }
-
-/* * * * * * * * * * * * * * * */
-/* Edit and Delete Buttons */
-.buttons_container {
-	display: flex;
-}
-.buttons_container > * {
-	margin: 1rem;
-}

@@ -86,7 +86,7 @@ export default function BusinessPage({ business }) {
 					</div>
 				</div>
 			</div>
-			<div className={styles.buttons_container}>
+			<div className={buttonStyles.buttons_container}>
 				{session ? (
 					<>
 						<Button

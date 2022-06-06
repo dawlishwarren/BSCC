@@ -1,6 +1,11 @@
 import dbConnect from '../../../lib/dbConnect';
 import Business from '../../../models/Business';
 import { getSession } from 'next-auth/react';
+import nextConnect from 'next-connect';
+import uploadMiddleware from '../../../middleware/uploadMiddleware';
+
+const handler = nextConnect();
+handler.use(uploadMiddleware);
 
 export default async function handler(req, res) {
 	const { method } = req;
