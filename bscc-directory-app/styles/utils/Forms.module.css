@@ -4,6 +4,13 @@
 	font-size: 1.2rem;
 }
 
+.custom_file_upload {
+	border: 2px dashed teal;
+	display: inline-block;
+	cursor: pointer;
+	padding: 1rem;
+}
+
 /* Inputs */
 .input_field[type='message'] {
 	height: 100%;
@@ -27,6 +34,9 @@
 	outline: none;
 	padding-top: calc(1rem - 1px);
 	padding-left: calc(1rem - 1px);
+}
+.input_field[type='file'] {
+	display: none;
 }
 .input_field {
 	margin-bottom: 2rem;

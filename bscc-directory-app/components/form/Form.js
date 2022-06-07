@@ -169,7 +169,15 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 			};
 		}
 	};
-	const handleIconChange = (e) => {
+	const handleImageDelete = (changeEvent) => {
+		// Get image source of target
+		const targetSrc = changeEvent.target.parentElement.firstChild.src;
+		// Filter state
+		const filtered = imagesSource.filter((imgSrc) => imgSrc != targetSrc);
+		// Return filtered state
+		setImagesSource(filtered);
+	};
+	const handleLogoChange = (e) => {
 		const file = e.target.files[0];
 		const reader = new FileReader();
 		reader.readAsDataURL(file);
@@ -179,6 +187,9 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 		reader.onerror = () => {
 			console.log(reader.error);
 		};
+	};
+	const handleLogoDelete = () => {
+		setLogoSource('');
 	};
 
 	return (
@@ -322,34 +333,46 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 						<div className={styles.subtitle_container}>
 							<h3 className={styles.subtitle}>Image and Logo:</h3>
 						</div>
-						<label className={formStyles.label} htmlFor='image'>
-							Business Image
+						<label
+							className={formStyles.custom_file_upload}
+							htmlFor='image-upload'>
+							Click to upload your business image
+							<input
+								className={formStyles.input_field}
+								id='image-upload'
+								type='file'
+								name='image'
+								onChange={handleImageChange}
+								accept='image/*'
+								multiple
+							/>
 						</label>
-						<input
-							className={formStyles.input_field}
-							type='file'
-							name='image'
-							onChange={handleImageChange}
-							accept='image/*'
-							multiple
-						/>
 						<div className={styles.image_preview_container}>
 							{imagesSource.map((link, index) => (
-								<img src={link} key={index} className={styles.image_preview} />
+								<div key={index}>
+									<img src={link} className={styles.image_preview}></img>
+									<button onClick={handleImageDelete}>X</button>
+								</div>
 							))}
 						</div>
-						<label className={formStyles.label} htmlFor='image'>
-							Business Icon
+						<label
+							className={formStyles.custom_file_upload}
+							htmlFor='logo-upload'>
+							Click to upload your logo
+							<input
+								className={formStyles.input_field}
+								id='logo-upload'
+								type='file'
+								name='logo'
+								onChange={handleLogoChange}
+								accept='image/*'
+							/>
 						</label>
-						<input
-							className={formStyles.input_field}
-							type='file'
-							name='icon'
-							onChange={handleIconChange}
-							accept='image/*'
-						/>
 						<div className={styles.image_preview_container}>
 							<img src={logoSource} className={styles.image_preview} />
+							{logoSource.length > 0 && (
+								<button onClick={handleLogoDelete}>X</button>
+							)}
 						</div>
 					</div>
 					{/* ***************************** */}
