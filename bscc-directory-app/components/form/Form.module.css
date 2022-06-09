@@ -78,16 +78,25 @@
 	padding-bottom: 0.5rem;
 }
 
-.image_preview_container {
+.preview_container {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
 	align-items: center;
 	justify-content: flex-start;
 }
+.image_preview_container {
+	position: relative;
+}
 
 .image_preview {
 	height: auto;
 	width: 200px;
-	padding: 1rem 1rem 0 0;
+	padding: 1rem 1rem 0;
+	margin: 2rem 0;
+}
+.image_preview_delete {
+	position: absolute;
+	bottom: 0;
+	right: 0;
 }

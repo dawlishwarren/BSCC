@@ -11,11 +11,9 @@ import { BiArrowBack, BiEditAlt } from 'react-icons/bi';
 
 // File uploader:
 // 1. Input field for uploading images.
-// a. As an array for images
-// b. As an string for logo
-// c. Style the inputs
 
-// 2. Validation based on size and file size.
+// 2. Validation based on size and file size
+// a. Don't use PNG for image, fine for logo
 // 3. Change handler handles images for preview and also form updates
 // 4. Commits to database
 // a. Check that mongodb is best place to handle images
@@ -28,7 +26,7 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 	const [errors, setErrors] = useState({});
 	const [message, setMessage] = useState('');
 	const [imagesSource, setImagesSource] = useState([]);
-	const [logoSource, setLogoSource] = useState();
+	const [logoSource, setLogoSource] = useState('');
 
 	const [form, setForm] = useState({
 		name: businessForm.name,
@@ -205,6 +203,19 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 						? `Add Business: ${form.name}`
 						: `Edit Business: ${form.name}`}{' '}
 				</h2>
+				{forNewBusiness && (
+					<p>
+						Fill in the fields below, add any relevant images with the file
+						uploader, and press the green submit button at the bottom to save
+						the business.
+					</p>
+				)}
+				{!forNewBusiness && (
+					<p>
+						Edit any of the fields below, add or remove any images and press the
+						submit button at the bottom to save your changes.
+					</p>
+				)}
 			</div>
 			<form id={formId} onSubmit={handleSubmit} className={styles.form}>
 				<div className={styles.form_area}>
@@ -347,13 +358,20 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 								multiple
 							/>
 						</label>
-						<div className={styles.image_preview_container}>
+						<div className={styles.preview_container}>
 							{imagesSource.map((link, index) => (
-								<div key={index}>
-									<img src={link} className={styles.image_preview}></img>
-									<button onClick={handleImageDelete}>X</button>
+								<div className={styles.image_preview_container} key={index}>
+									<img src={link} className={styles.image_preview} />
+									<button
+										onClick={handleImageDelete}
+										className={`${buttonStyles.button} ${buttonStyles.delete} ${buttonStyles.small} ${styles.image_preview_delete}`}>
+										X
+									</button>
 								</div>
 							))}
+							{imagesSource.length > 0 && (
+								<p>Add more or press the red X to delete a selection</p>
+							)}
 						</div>
 						<label
 							className={formStyles.custom_file_upload}
@@ -368,11 +386,17 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 								accept='image/*'
 							/>
 						</label>
-						<div className={styles.image_preview_container}>
-							<img src={logoSource} className={styles.image_preview} />
-							{logoSource.length > 0 && (
-								<button onClick={handleLogoDelete}>X</button>
-							)}
+						<div className={styles.preview_container}>
+							<div className={styles.image_preview_container}>
+								<img src={logoSource} className={styles.image_preview} />
+								{logoSource != '' && (
+									<button
+										onClick={handleLogoDelete}
+										className={`${buttonStyles.button} ${buttonStyles.delete} ${buttonStyles.small} ${styles.image_preview_delete}`}>
+										X
+									</button>
+								)}
+							</div>
 						</div>
 					</div>
 					{/* ***************************** */}
