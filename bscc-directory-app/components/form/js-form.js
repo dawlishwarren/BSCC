@@ -1,4 +1,4 @@
-import styles from './Form.module.css';
+import styles from '../../styles/contact/Contactform.module.css';
 import formStyles from '../../styles/utils/Forms.module.css';
 
 export default function PageWithJSbasedForm() {
@@ -23,59 +23,58 @@ export default function PageWithJSbasedForm() {
 		};
 		const response = await fetch(endpoint, options);
 		const result = await response.json();
-		alert(`Message: ${result.data}`);
+		alert(`Message: ${result}`);
 	};
 
 	return (
 		<form onSubmit={handleSubmit} className={styles.form}>
+			<label className={formStyles.label} htmlFor='name' />
 			<div className={styles.form_area}>
-				<label className={formStyles.label} htmlFor='name'>
-					Your name
-				</label>
 				<input
 					type='text'
 					name='name'
-					className={formStyles.input_field}
+					className={styles.input_field}
 					required
+					placeholder='Name'
 				/>
 			</div>
 			<div className={styles.form_area}>
-				<label className={formStyles.label} htmlFor='email'>
-					Your email
-				</label>
+				<label className={formStyles.label} htmlFor='email' />
 				<input
 					type='email'
 					name='email'
-					className={formStyles.input_field}
+					className={styles.input_field}
 					required
+					placeholder='Email address'
 				/>
 			</div>
 			<div className={styles.form_area}>
-				<label className={formStyles.label} htmlFor='phone'>
-					Phone number
-				</label>
-				<input type='text' name='phone' className={formStyles.input_field} />
+				<label className={formStyles.label} htmlFor='phone' />
+				<input
+					type='text'
+					name='phone'
+					className={styles.input_field}
+					placeholder='Phone number (optional)'
+				/>
 			</div>
 			<div className={styles.form_area}>
-				<label className={formStyles.label} htmlFor='subject'>
-					Subject
-				</label>
+				<label className={formStyles.label} htmlFor='subject' />
 				<input
 					type='text'
 					name='subject'
-					className={formStyles.input_field}
+					className={styles.input_field}
 					required
+					placeholder='Subject'
 				/>
 			</div>
 			<div className={styles.form_area}>
-				<label className={formStyles.label} htmlFor='message'>
-					Your message
-				</label>
+				<label className={formStyles.label} htmlFor='message' />
 				<textarea
 					type='text'
 					name='message'
-					className={formStyles.input_field}
+					className={styles.textarea_field}
 					required
+					placeholder='Your question'
 				/>
 			</div>
 			<button type='submit' className={styles.submit}>

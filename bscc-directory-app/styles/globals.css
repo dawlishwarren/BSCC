@@ -11,7 +11,8 @@ h1,
 h2,
 h3,
 h4,
-textarea {
+textarea,
+::placeholder {
 	font-family: 'Bilo Light', sans-serif;
 }
 a {

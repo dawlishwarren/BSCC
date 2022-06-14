@@ -6,10 +6,9 @@ export default function Document() {
 			<Head>
 				<link rel='stylesheet' href='https://use.typekit.net/qjl2zdc.css' />
 			</Head>
-			<body>
-				<Main />
-				<NextScript />
-			</body>
+			<Main />
+			<NextScript />
+			<body></body>
 		</Html>
 	);
 }

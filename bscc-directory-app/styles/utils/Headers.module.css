@@ -1,0 +1,35 @@
+/* Headers and Titles */
+.header {
+	display: flex;
+	height: 100%;
+	width: 100%;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	margin-bottom: 3rem;
+}
+.title {
+	margin-top: 1rem;
+	position: relative;
+}
+
+.subheader_container,
+.subtitle_container {
+	display: flex;
+}
+.subheader,
+.subtitle {
+	font-size: 1.5rem;
+	position: relative;
+}
+.title::after,
+.subheader::after,
+.subtitle::after {
+	position: absolute;
+	content: '';
+	background-color: teal;
+	width: 100%;
+	height: 2px;
+	left: 0;
+	bottom: -1px;
+}

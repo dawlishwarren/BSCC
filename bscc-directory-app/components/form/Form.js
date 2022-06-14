@@ -1,21 +1,23 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
+import aws from '../../pages/api/s3/uploadFile';
 
 import Layout from '../layout/layout';
 import styles from './Form.module.css';
 import buttonStyles from '../button/Button.module.css';
 import formStyles from '../../styles/utils/Forms.module.css';
+import headerStyles from '../../styles/utils/Headers.module.css';
 import Button from '../button/Button';
 import { BiArrowBack, BiEditAlt } from 'react-icons/bi';
 
 // File uploader:
-// 1. Input field for uploading images.
 
 // 2. Validation based on size and file size
 // a. Don't use PNG for image, fine for logo
+
 // 3. Change handler handles images for preview and also form updates
-// 4. Commits to database
+// 4. Commits image to S3, commits url to mongodb
 // a. Check that mongodb is best place to handle images
 // b. Otherwise look into CORS solution
 
@@ -23,10 +25,12 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 	const { mutate } = useSWRConfig();
 	const router = useRouter();
 	const contentType = 'application/json';
+	const [newFormId, setNewFormId] = useState('');
 	const [errors, setErrors] = useState({});
 	const [message, setMessage] = useState('');
 	const [imagesSource, setImagesSource] = useState([]);
 	const [logoSource, setLogoSource] = useState('');
+	const [filesToUpload, setFilesToUpload] = useState([]);
 
 	const [form, setForm] = useState({
 		name: businessForm.name,
@@ -39,7 +43,6 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 		town: businessForm.address.town,
 		postcode: businessForm.address.postcode,
 		category: businessForm.category,
-		image: businessForm.image,
 	});
 
 	/* The PUT method edits an existing entry in the mongodb database. */
@@ -47,6 +50,10 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 		const { id } = router.query;
 
 		try {
+			// PutObject to S3 bucket with image url
+			// Add form
+			const imageUrls = await aws(filesToUpload, id);
+			console.log(`Image Urls:`, imageUrls);
 			const res = await fetch(`/api/businesses/${id}`, {
 				method: 'PUT',
 				headers: {
@@ -68,6 +75,7 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 					},
 					bio: form.bio,
 					category: form.category,
+					imageUrls: imageUrls,
 				}),
 			});
 
@@ -110,11 +118,22 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 					bio: form.bio,
 					category: form.category,
 				}),
-			});
-			console.log(form);
-			if (!res.ok) {
-				throw new Error(res.status);
-			}
+			})
+				.then((res) => {
+					if (!res.ok) {
+						throw new Error(res.status);
+					}
+					return res.blob();
+				})
+				.then((res) => res.json())
+				.then((body) => {
+					// Destructure the response to get the MongoDB _id
+					const { data } = body;
+					const { _id } = data;
+				});
+			const imageUrls = await aws(filesToUpload, _id);
+			console.log(`Image Urls:`, imageUrls);
+
 			router.push('/directory');
 		} catch (error) {
 			setMessage('Failed to add business');
@@ -157,10 +176,12 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 
 	const handleImageChange = (changeEvent) => {
 		for (const file of changeEvent.target.files) {
+			// Create filereader for image
 			const reader = new FileReader();
 			reader.readAsDataURL(file);
 			reader.onload = () => {
 				setImagesSource((images) => [...images, reader.result]);
+				setFilesToUpload((files) => [...files, file]);
 			};
 			reader.onerror = () => {
 				console.log(reader.error);
@@ -197,8 +218,8 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 				<Button type='back' href='/directory' inner={<BiArrowBack />} />
 				<h4 className={buttonStyles.back_button_text}>Back to directory</h4>
 			</div>
-			<div className={styles.header}>
-				<h2 className={styles.title}>
+			<div className={headerStyles.header}>
+				<h2 className={headerStyles.title}>
 					{forNewBusiness
 						? `Add Business: ${form.name}`
 						: `Edit Business: ${form.name}`}{' '}
@@ -220,8 +241,8 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 			<form id={formId} onSubmit={handleSubmit} className={styles.form}>
 				<div className={styles.form_area}>
 					<div className={styles.bio_container}>
-						<div className={styles.subtitle_container}>
-							<h3 className={styles.subtitle}>Details:</h3>
+						<div className={headerStyles.subtitle_container}>
+							<h3 className={headerStyles.subtitle}>Details:</h3>
 						</div>
 						<label className={formStyles.label} htmlFor='name'>
 							Name
@@ -248,8 +269,8 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 					</div>
 
 					<div className={styles.contact_container}>
-						<div className={styles.subtitle_container}>
-							<h3 className={styles.subtitle}>Contact:</h3>
+						<div className={headerStyles.subtitle_container}>
+							<h3 className={headerStyles.subtitle}>Contact:</h3>
 						</div>
 						<label className={formStyles.label} htmlFor='phone'>
 							Phone
@@ -288,8 +309,8 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 					</div>
 
 					<div className={styles.address_container}>
-						<div className={styles.subtitle_container}>
-							<h3 className={styles.subtitle}>Address:</h3>
+						<div className={headerStyles.subtitle_container}>
+							<h3 className={headerStyles.subtitle}>Address:</h3>
 						</div>
 						<label className={formStyles.label} htmlFor='line_1'>
 							Line 1
@@ -341,8 +362,8 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 					</div>
 					{/* ***************************** */}
 					<div className={styles.images_container}>
-						<div className={styles.subtitle_container}>
-							<h3 className={styles.subtitle}>Image and Logo:</h3>
+						<div className={headerStyles.subtitle_container}>
+							<h3 className={headerStyles.subtitle}>Image and Logo:</h3>
 						</div>
 						<label
 							className={formStyles.custom_file_upload}
@@ -401,8 +422,8 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 					</div>
 					{/* ***************************** */}
 					<div className={styles.fieldset_container}>
-						<div className={styles.subtitle_container}>
-							<h3 className={styles.subtitle}>Business Category:</h3>
+						<div className={headerStyles.subtitle_container}>
+							<h3 className={headerStyles.subtitle}>Business Category:</h3>
 						</div>
 						<fieldset className={styles.fieldset}>
 							<legend>Choose the category that best suits your business</legend>

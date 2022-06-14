@@ -42,6 +42,9 @@ const BusinessSchema = new mongoose.Schema({
 	category: {
 		type: String,
 	},
+	imageUrls: {
+		type: [String],
+	},
 });
 
 export default mongoose.models.Business ||

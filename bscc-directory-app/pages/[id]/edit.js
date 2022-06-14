@@ -33,6 +33,7 @@ const EditBusiness = () => {
 		},
 		bio: business.bio,
 		category: business.category,
+		imageUrls: business.imageUrls,
 	};
 	return (
 		<Form

@@ -1,0 +1,48 @@
+/* Form */
+.form {
+	width: 40vw;
+	border: 2px solid teal;
+	border-radius: 25px;
+	padding: 2rem;
+}
+/* Areas and label */
+.form_area {
+	display: flex;
+	flex-direction: column;
+	padding: 1rem;
+	align-items: center;
+	margin: auto;
+}
+.input_field,
+.textarea_field {
+	border: solid 1px teal;
+	border-radius: 25px;
+	padding: 1rem;
+	width: 25vw;
+}
+.input_field:focus,
+.textarea_field {
+	outline: none;
+}
+.textarea_field {
+	height: 200px;
+}
+.submit {
+	padding: 1rem;
+	height: 25%;
+	width: 25vw;
+	background: none;
+	border-radius: 25px;
+	border: 1px solid teal;
+	display: block;
+	margin: 1rem auto;
+	cursor: pointer;
+	transition: all 0.5s;
+	transition: background 1.3s, color 1.3s;
+}
+.submit:hover {
+	border: 1px solid teal;
+	border-radius: 25px;
+	background: teal;
+	color: white;
+}

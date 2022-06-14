@@ -34,6 +34,7 @@ export default function BusinessPage({ business }) {
 		contact: { phone, website, email },
 		address: { line_1, line_2, town, postcode },
 		category,
+		imageUrls,
 	} = business;
 
 	function bioToParagraph() {
@@ -47,7 +48,6 @@ export default function BusinessPage({ business }) {
 		};
 	}, []);
 
-	// JSX
 	return (
 		<Layout>
 			<div className={buttonStyles.back_button_container}>
@@ -86,6 +86,7 @@ export default function BusinessPage({ business }) {
 					</div>
 				</div>
 			</div>
+			{imageUrls && imageUrls.length > 0 && <img src={imageUrls[0]} />}
 			<div className={buttonStyles.buttons_container}>
 				{session ? (
 					<>
