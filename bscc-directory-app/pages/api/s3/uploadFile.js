@@ -1,18 +1,18 @@
-import S3 from 'aws-sdk/clients/s3';
-import { v4 as uuid } from 'uuid';
+import S3 from "aws-sdk/clients/s3";
+import { v4 as uuid } from "uuid";
 
 // Create Instance
 const s3 = new S3({
-	region: 'us-east-1',
+	region: "us-east-1",
 	accessKeyId: process.env.ACCESS_KEY,
 	secretAccessKey: process.env.SECRET_KEY,
-	signatureVersion: 'v4',
+	signatureVersion: "v4",
 });
 
-const BUCKET_NAME = 'bscc-directory-library';
+const BUCKET_NAME = "bscc-directory-library";
 const BUCKET_URL = `https://${BUCKET_NAME}.s3.amazonaws.com/`;
 
-export default async function aws(files, id) {
+export default async function handler(files, id) {
 	try {
 		const imageUrls = [];
 		// Get MongoDB object id to be set as a directory in the S3 file params
@@ -20,7 +20,7 @@ export default async function aws(files, id) {
 		// For each file uploaded
 		files.forEach((file) => {
 			// Get the format from the string
-			const [_, imageFormat] = file.type.split('/');
+			const [_, imageFormat] = file.type.split("/");
 			console.log(imageFormat);
 			const uploadedImageKey = `${uuid()}.${imageFormat}`;
 
@@ -48,7 +48,7 @@ export default async function aws(files, id) {
 export const config = {
 	api: {
 		bodyParser: {
-			sizeLimit: '8mb',
+			sizeLimit: "8mb",
 		},
 	},
 };

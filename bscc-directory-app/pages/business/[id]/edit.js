@@ -1,6 +1,6 @@
-import { useRouter } from 'next/router';
-import useSWR from 'swr';
-import Form from '../../components/form/Form';
+import { useRouter } from "next/router";
+import useSWR from "swr";
+import Form from "../../../components/form/Form";
 
 const fetcher = (url) =>
 	fetch(url)
@@ -37,7 +37,7 @@ const EditBusiness = () => {
 	};
 	return (
 		<Form
-			formId='edit-business-form'
+			formId="edit-business-form"
 			businessForm={businessForm}
 			forNewBusiness={false}
 		/>

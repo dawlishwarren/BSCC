@@ -1,35 +1,25 @@
-import { useRouter } from 'next/router';
-import { useState } from 'react';
-import useSWR, { useSWRConfig } from 'swr';
-import aws from '../../pages/api/s3/uploadFile';
+import { useRouter } from "next/router";
+import { useState } from "react";
+import useSWR, { useSWRConfig } from "swr";
+import aws from "../../pages/api/s3/uploadFile";
 
-import Layout from '../layout/layout';
-import styles from './Form.module.css';
-import buttonStyles from '../button/Button.module.css';
-import formStyles from '../../styles/utils/Forms.module.css';
-import headerStyles from '../../styles/utils/Headers.module.css';
-import Button from '../button/Button';
-import { BiArrowBack, BiEditAlt } from 'react-icons/bi';
-
-// File uploader:
-
-// 2. Validation based on size and file size
-// a. Don't use PNG for image, fine for logo
-
-// 3. Change handler handles images for preview and also form updates
-// 4. Commits image to S3, commits url to mongodb
-// a. Check that mongodb is best place to handle images
-// b. Otherwise look into CORS solution
+import Layout from "../layout/layout";
+import styles from "./Form.module.css";
+import buttonStyles from "../button/Button.module.css";
+import formStyles from "../../styles/utils/Forms.module.css";
+import headerStyles from "../../styles/utils/Headers.module.css";
+import Button from "../button/Button";
+import { BiArrowBack, BiEditAlt } from "react-icons/bi";
 
 const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 	const { mutate } = useSWRConfig();
 	const router = useRouter();
-	const contentType = 'application/json';
-	const [newFormId, setNewFormId] = useState('');
+	const contentType = "application/json";
+	const [newFormId, setNewFormId] = useState("");
 	const [errors, setErrors] = useState({});
-	const [message, setMessage] = useState('');
-	const [imagesSource, setImagesSource] = useState([]);
-	const [logoSource, setLogoSource] = useState('');
+	const [message, setMessage] = useState("");
+	const [imagesSource, setImagesSource] = useState(businessForm.imageUrls);
+	const [logoSource, setLogoSource] = useState("");
 	const [filesToUpload, setFilesToUpload] = useState([]);
 
 	const [form, setForm] = useState({
@@ -43,6 +33,7 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 		town: businessForm.address.town,
 		postcode: businessForm.address.postcode,
 		category: businessForm.category,
+		imageUrls: businessForm.imageUrls,
 	});
 
 	/* The PUT method edits an existing entry in the mongodb database. */
@@ -52,13 +43,16 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 		try {
 			// PutObject to S3 bucket with image url
 			// Add form
-			const imageUrls = await aws(filesToUpload, id);
+			const imageUrls = await axios.post("/api/s3/uploadFile", {
+				files: filesToUpload,
+				id: id,
+			});
 			console.log(`Image Urls:`, imageUrls);
 			const res = await fetch(`/api/businesses/${id}`, {
-				method: 'PUT',
+				method: "PUT",
 				headers: {
 					Accept: contentType,
-					'Content-Type': contentType,
+					"Content-Type": contentType,
 				},
 				body: JSON.stringify({
 					name: form.name,
@@ -87,20 +81,20 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 			const { data } = await res.json();
 			console.log(data);
 			mutate(`/api/business/${id}`, data, false); // Update the local data without a revalidation
-			router.push('/directory');
+			router.push("/directory");
 		} catch (error) {
-			setMessage('Failed to update business');
+			setMessage("Failed to update business");
 		}
 	};
 
 	// POST method adds new entry
 	const postData = async (form) => {
 		try {
-			const res = await fetch('/api/businesses', {
-				method: 'POST',
+			const res = await fetch("/api/businesses", {
+				method: "POST",
 				headers: {
 					Accept: contentType,
-					'Content-Type': contentType,
+					"Content-Type": contentType,
 				},
 				body: JSON.stringify({
 					name: form.name,
@@ -134,9 +128,9 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 			const imageUrls = await aws(filesToUpload, _id);
 			console.log(`Image Urls:`, imageUrls);
 
-			router.push('/directory');
+			router.push("/directory");
 		} catch (error) {
-			setMessage('Failed to add business');
+			setMessage("Failed to add business");
 		}
 	};
 
@@ -165,12 +159,12 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 
 	const formValidate = () => {
 		let error = {};
-		if (!form.name) error.name = 'Name is required';
-		if (!form.phone) error.phone = 'A phone number is required';
-		if (!form.line_1) error.line_1 = 'A full address is required';
-		if (!form.town) error.town = 'A full address is required';
-		if (!form.postcode) error.postcode = 'A full address is required';
-		if (!form.bio) error.bio = 'A business description is required';
+		if (!form.name) error.name = "Name is required";
+		if (!form.phone) error.phone = "A phone number is required";
+		if (!form.line_1) error.line_1 = "A full address is required";
+		if (!form.town) error.town = "A full address is required";
+		if (!form.postcode) error.postcode = "A full address is required";
+		if (!form.bio) error.bio = "A business description is required";
 		return error;
 	};
 
@@ -208,21 +202,21 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 		};
 	};
 	const handleLogoDelete = () => {
-		setLogoSource('');
+		setLogoSource("");
 	};
 
 	return (
 		<Layout>
 			{/* Back button */}
 			<div className={buttonStyles.back_button_container}>
-				<Button type='back' href='/directory' inner={<BiArrowBack />} />
+				<Button type="back" href="/directory" inner={<BiArrowBack />} />
 				<h4 className={buttonStyles.back_button_text}>Back to directory</h4>
 			</div>
 			<div className={headerStyles.header}>
 				<h2 className={headerStyles.title}>
 					{forNewBusiness
 						? `Add Business: ${form.name}`
-						: `Edit Business: ${form.name}`}{' '}
+						: `Edit Business: ${form.name}`}{" "}
 				</h2>
 				{forNewBusiness && (
 					<p>
@@ -244,24 +238,24 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 						<div className={headerStyles.subtitle_container}>
 							<h3 className={headerStyles.subtitle}>Details:</h3>
 						</div>
-						<label className={formStyles.label} htmlFor='name'>
+						<label className={formStyles.label} htmlFor="name">
 							Name
 						</label>
 						<input
 							className={formStyles.input_field}
-							type='text'
-							name='name'
+							type="text"
+							name="name"
 							value={form.name}
 							onChange={handleChange}
 							required
 						/>
-						<label className={formStyles.label} htmlFor='bio'>
+						<label className={formStyles.label} htmlFor="bio">
 							Bio
 						</label>
 						<textarea
 							className={formStyles.textarea}
-							type='text'
-							name='bio'
+							type="text"
+							name="bio"
 							value={form.bio}
 							onChange={handleChange}
 							required
@@ -272,39 +266,39 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 						<div className={headerStyles.subtitle_container}>
 							<h3 className={headerStyles.subtitle}>Contact:</h3>
 						</div>
-						<label className={formStyles.label} htmlFor='phone'>
+						<label className={formStyles.label} htmlFor="phone">
 							Phone
 						</label>
 						<input
 							className={formStyles.input_field}
-							type='text'
-							name='phone'
+							type="text"
+							name="phone"
 							value={form.phone}
 							onChange={handleChange}
 							required
-							placeholder='01395 000000'
+							placeholder="01395 000000"
 						/>
-						<label className={formStyles.label} htmlFor='website'>
+						<label className={formStyles.label} htmlFor="website">
 							Website
 						</label>
 						<input
 							className={formStyles.input_field}
-							type='text'
-							name='website'
+							type="text"
+							name="website"
 							value={form.website}
 							onChange={handleChange}
-							placeholder='www.example.com'
+							placeholder="www.example.com"
 						/>
-						<label className={formStyles.label} htmlFor='email'>
+						<label className={formStyles.label} htmlFor="email">
 							Email
 						</label>
 						<input
 							className={formStyles.input_field}
-							type='text'
-							name='email'
+							type="text"
+							name="email"
 							value={form.email}
 							onChange={handleChange}
-							placeholder='example@mail.com'
+							placeholder="example@mail.com"
 						/>
 					</div>
 
@@ -312,52 +306,52 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 						<div className={headerStyles.subtitle_container}>
 							<h3 className={headerStyles.subtitle}>Address:</h3>
 						</div>
-						<label className={formStyles.label} htmlFor='line_1'>
+						<label className={formStyles.label} htmlFor="line_1">
 							Line 1
 						</label>
 						<input
 							className={formStyles.input_field}
-							type='text'
-							name='line_1'
+							type="text"
+							name="line_1"
 							value={form.line_1}
 							onChange={handleChange}
 							required
-							placeholder='House Number or Name (or Street if not applicatable)'
+							placeholder="House Number or Name (or Street if not applicatable)"
 						/>
-						<label className={formStyles.label} htmlFor='line_2'>
+						<label className={formStyles.label} htmlFor="line_2">
 							Line 2
 						</label>
 						<input
 							className={formStyles.input_field}
-							type='text'
-							name='line_2'
+							type="text"
+							name="line_2"
 							value={form.line_2}
 							onChange={handleChange}
-							placeholder='Street'
+							placeholder="Street"
 						/>
-						<label className={formStyles.label} htmlFor='town'>
+						<label className={formStyles.label} htmlFor="town">
 							Town
 						</label>
 						<input
 							className={formStyles.input_field}
-							type='text'
-							name='town'
+							type="text"
+							name="town"
 							value={form.town}
 							onChange={handleChange}
 							required
-							placeholder='Town'
+							placeholder="Town"
 						/>
-						<label className={formStyles.label} htmlFor='postcode'>
+						<label className={formStyles.label} htmlFor="postcode">
 							Postcode
 						</label>
 						<input
 							className={formStyles.input_field}
-							type='text'
-							name='postcode'
+							type="text"
+							name="postcode"
 							value={form.postcode}
 							onChange={handleChange}
 							required
-							placeholder='Postcode'
+							placeholder="Postcode"
 						/>
 					</div>
 					{/* ***************************** */}
@@ -367,15 +361,15 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 						</div>
 						<label
 							className={formStyles.custom_file_upload}
-							htmlFor='image-upload'>
+							htmlFor="image-upload">
 							Click to upload your business image
 							<input
 								className={formStyles.input_field}
-								id='image-upload'
-								type='file'
-								name='image'
+								id="image-upload"
+								type="file"
+								name="image"
 								onChange={handleImageChange}
-								accept='image/*'
+								accept="image/*"
 								multiple
 							/>
 						</label>
@@ -396,21 +390,21 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 						</div>
 						<label
 							className={formStyles.custom_file_upload}
-							htmlFor='logo-upload'>
+							htmlFor="logo-upload">
 							Click to upload your logo
 							<input
 								className={formStyles.input_field}
-								id='logo-upload'
-								type='file'
-								name='logo'
+								id="logo-upload"
+								type="file"
+								name="logo"
 								onChange={handleLogoChange}
-								accept='image/*'
+								accept="image/*"
 							/>
 						</label>
 						<div className={styles.preview_container}>
 							<div className={styles.image_preview_container}>
 								<img src={logoSource} className={styles.image_preview} />
-								{logoSource != '' && (
+								{logoSource != "" && (
 									<button
 										onClick={handleLogoDelete}
 										className={`${buttonStyles.button} ${buttonStyles.delete} ${buttonStyles.small} ${styles.image_preview_delete}`}>
@@ -428,50 +422,50 @@ const Form = ({ formId, businessForm, forNewBusiness = true }) => {
 						<fieldset className={styles.fieldset}>
 							<legend>Choose the category that best suits your business</legend>
 							<input
-								type='radio'
-								id='restaurant'
-								name='category'
-								value='restaurant'
-								checked={form.category === 'restaurant'}
+								type="radio"
+								id="restaurant"
+								name="category"
+								value="restaurant"
+								checked={form.category === "restaurant"}
 								onChange={handleChange}
 							/>
-							<label htmlFor='restaurant'>Restaurant</label>
+							<label htmlFor="restaurant">Restaurant</label>
 							<input
-								type='radio'
-								id='shop'
-								name='category'
-								value='shop'
-								checked={form.category === 'shop'}
+								type="radio"
+								id="shop"
+								name="category"
+								value="shop"
+								checked={form.category === "shop"}
 								onChange={handleChange}
 							/>
-							<label htmlFor='shop'>Shop</label>
+							<label htmlFor="shop">Shop</label>
 							<input
-								type='radio'
-								id='service'
-								name='category'
-								value='service'
-								checked={form.category === 'service'}
+								type="radio"
+								id="service"
+								name="category"
+								value="service"
+								checked={form.category === "service"}
 								onChange={handleChange}
 							/>
-							<label htmlFor='service'>Service</label>
+							<label htmlFor="service">Service</label>
 							<input
-								type='radio'
-								id='other'
-								name='category'
-								value='other'
+								type="radio"
+								id="other"
+								name="category"
+								value="other"
 								checked={
-									form.category === 'other' || form.category === undefined
+									form.category === "other" || form.category === undefined
 								}
 								onChange={handleChange}
 							/>
-							<label htmlFor='other'>Other</label>
+							<label htmlFor="other">Other</label>
 						</fieldset>
 					</div>
 				</div>
 				{/* Form submit button: styles depend on whether form is Add or Edit */}
 				<div className={buttonStyles.buttons_container}>
 					<button
-						type='submit'
+						type="submit"
 						className={`${[buttonStyles.button]} ${
 							forNewBusiness ? [buttonStyles.add] : [buttonStyles.edit]
 						}`}>

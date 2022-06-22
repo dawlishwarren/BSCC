@@ -1,30 +1,31 @@
 // Setup and dependencies
-import { useEffect, useState } from 'react';
-import dbConnect from '../../lib/dbConnect';
-import Business from '../../models/Business';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import { useEffect, useState } from "react";
+import dbConnect from "../../../lib/dbConnect";
+import Business from "../../../models/Business";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 // Styling and components
-import Layout from '../../components/layout/layout';
-import Button from '../../components/button/Button';
-import styles from '../../styles/Business.module.css';
-import buttonStyles from '../../components/button/Button.module.css';
-import { BiArrowBack, BiEditAlt } from 'react-icons/bi';
-import { AiOutlineDelete } from 'react-icons/ai';
+import Layout from "../../../components/layout/layout";
+import Button from "../../../components/button/Button";
+import styles from "../../../styles/Business.module.css";
+import buttonStyles from "../../../components/button/Button.module.css";
+import { BiArrowBack, BiEditAlt } from "react-icons/bi";
+import { AiOutlineDelete } from "react-icons/ai";
+import S3 from "aws-sdk/clients/s3";
 
 export default function BusinessPage({ business }) {
 	const { data: session } = useSession();
 	const [sentences, setSentences] = useState([]);
 	const router = useRouter();
-	const [message, setMessage] = useState('');
+	const [message, setMessage] = useState("");
 	const handleDelete = async () => {
 		const businessID = router.query.id;
 		try {
-			await fetch(`/api/businesses/${businessID}`, { method: 'Delete' });
-			router.push('/directory');
+			await fetch(`/api/businesses/${businessID}`, { method: "Delete" });
+			router.push("/directory");
 		} catch (err) {
-			setMessage('Failed to delete the business, please check the console');
+			setMessage("Failed to delete the business, please check the console");
 		}
 	};
 	// Prop destructuring
@@ -38,9 +39,10 @@ export default function BusinessPage({ business }) {
 	} = business;
 
 	function bioToParagraph() {
-		let split = bio.split('.');
+		let split = bio.split(".");
 		setSentences(split);
 	}
+	async function getImages(urls) {}
 	useEffect(() => {
 		bioToParagraph();
 		return () => {
@@ -51,7 +53,7 @@ export default function BusinessPage({ business }) {
 	return (
 		<Layout>
 			<div className={buttonStyles.back_button_container}>
-				<Button type='back' href='/directory' inner={<BiArrowBack />} />
+				<Button type="back" href="/directory" inner={<BiArrowBack />} />
 				<h4 className={buttonStyles.back_button_text}>Back to directory</h4>
 			</div>
 			<div className={styles.business_container} key={business._id}>
@@ -86,14 +88,16 @@ export default function BusinessPage({ business }) {
 					</div>
 				</div>
 			</div>
+
+			{/* Use  */}
 			{imageUrls && imageUrls.length > 0 && <img src={imageUrls[0]} />}
 			<div className={buttonStyles.buttons_container}>
 				{session ? (
 					<>
 						<Button
-							type='edit'
-							href='/[id]/edit'
-							as={`/${business._id}/edit`}
+							type="edit"
+							href="/business/[id]/edit"
+							as={`/business/${business._id}/edit`}
 							inner={<BiEditAlt />}
 						/>
 						<button

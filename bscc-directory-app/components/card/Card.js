@@ -1,11 +1,11 @@
-import React from 'react';
-import Link from 'next/link';
-import styles from '../card/Card.module.css';
+import React from "react";
+import Link from "next/link";
+import styles from "../card/Card.module.css";
 
 const Card = ({ business }) => {
 	function bioCharacterLimit() {
-		if (business.bio.length > 150) return '...';
-		else return '';
+		if (business.bio.length > 150) return "...";
+		else return "";
 	}
 
 	const {
@@ -27,7 +27,7 @@ const Card = ({ business }) => {
 				</p>
 			</div>
 			<div className={styles.buttons}>
-				<Link href='/[id]' as={`/${business._id}`}>
+				<Link href="/business/[id]" as={`/business/${business._id}`}>
 					<button className={styles.button}>View Business</button>
 				</Link>
 			</div>

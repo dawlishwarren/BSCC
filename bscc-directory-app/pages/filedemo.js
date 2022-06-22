@@ -1,35 +1,59 @@
-import { useState } from 'react';
-import aws from './api/s3/uploadFile';
+import { set } from "mongoose";
+import { useState } from "react";
 
 const filedemo = () => {
-	const [file, setFile] = useState();
-	const [message, setMessage] = useState();
+	const [imageUrls, setImageUrls] = useState([]);
 
-	function storeFile(e) {
-		const selectedFile = e.target.files[0];
-		console.log(selectedFile);
-		setFile(selectedFile);
-	}
-	const uploadFile = async () => {
-		setMessage('Uploading');
-		var returnData = await aws(file);
-
-		setMessage(returnData);
-		setFile(null);
+	const listBucketObjects = async () => {
+		const objects = await fetch("/api/s3", {
+			method: "GET",
+		})
+			.then((res) => res.body)
+			.then((body) => {
+				const reader = body.getReader();
+				return new ReadableStream({
+					start(controller) {
+						function push() {
+							reader.read().then(({ done, value }) => {
+								if (done) {
+									console.log("done", done);
+									controller.close();
+									return;
+								}
+								controller.enqueue(value);
+								push();
+							});
+						}
+						push();
+					},
+				});
+			})
+			.then((stream) => {
+				return new Response(stream, {
+					headers: { "Content-Type": "xml" },
+				}).text();
+			})
+			.then((result) => {
+				const images = JSON.parse(result).contents;
+				images.map((image) => {
+					const { Key } = image;
+					setImageUrls((urls) => [...urls, Key]);
+				});
+			});
 	};
+
 	return (
 		<div>
 			<main>
-				<p>Please select a file to upload</p>
-				<input type='file' onChange={(e) => storeFile(e)} />
-				{file && (
-					<>
-						<p>Selected file: {file.name}</p>
-						<button onClick={uploadFile} defaultValue='Send'>
-							Upload
-						</button>
-					</>
-				)}
+				<button onClick={listBucketObjects}>Display all images</button>
+				{imageUrls.map((url) => {
+					imageUrls && imageUrls.length > 0 && (
+						<>
+							<p>hello world</p>
+							<p>`https://bscc-directory-library.s3.amazonaws.com/${url}`</p>;
+						</>
+					);
+				})}
 			</main>
 		</div>
 	);

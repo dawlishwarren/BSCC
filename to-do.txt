@@ -1,0 +1,11 @@
+AWS cleanup
+
+Clean up both bucket and mongoDB
+- Make sure all mongoDB entries don't have undefined URLs
+- Make sure all S3 entries have a directory
+
+
+- Remaining s3 endpoints
+- get [id] for Card, Form and Business
+- putObject for Form
+- Delete by [id] for Form
